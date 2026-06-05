@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AF51-RBX Studio Preview</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1f29'/><text x='8' y='12' font-size='12' fill='%2355bbff' text-anchor='middle'>A</text></svg>" />
+  <!--
+    Three.js loader: prefers a local vendored copy under ./vendor/, falls
+    back to a pinned CDN build. To go fully offline, run:
+        bash runtime/preview-engine/fetch-vendor.sh
+    once.
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three.module.js",
+        "three/addons/": "./vendor/three-addons/"
+      },
+      "scopes": {
+        "./": {
+          "three":          "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/":  "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">AF51-RBX <span class="dim">Studio Preview</span></div>
+    <div class="topbar-meta" id="meta">
+      <span id="meta-target">—</span>
+      <span class="sep">·</span>
+      <span id="meta-buildId">—</span>
+      <span class="sep">·</span>
+      <span id="meta-count">0 structures</span>
+    </div>
+    <div class="topbar-actions">
+      <label class="upload">
+        <input type="file" id="file-input" accept=".json,.zip" hidden />
+        <span>Open preview…</span>
+      </label>
+      <button id="btn-frame" title="Frame all (F)">Frame</button>
+      <button id="btn-grid"  title="Toggle grid (G)">Grid</button>
+    </div>
+  </header>
+
+  <div class="tier-toolbar" id="tier-toolbar">
+    <span class="tt-label">Tiers:</span>
+    <button class="tt-btn tt-all active" data-tier="all">All</button>
+    <button class="tt-btn tt-t0" data-tier="0">Gameplay</button>
+    <button class="tt-btn tt-t1" data-tier="1">Structure</button>
+    <button class="tt-btn tt-t2" data-tier="2">Secondary</button>
+    <button class="tt-btn tt-t3" data-tier="3">Detail</button>
+    <button class="tt-btn tt-t4" data-tier="4">Light</button>
+    <button class="tt-btn tt-t5" data-tier="5">Polish</button>
+    <span class="tt-sep">·</span>
+    <button class="tt-btn tt-heat" data-tier="heatmap">Quality Heatmap</button>
+    <span class="tt-score" id="quality-score">—</span>
+  </div>
+
+  <main class="studio">
+    <aside class="pane pane-left">
+      <div class="pane-title">Explorer</div>
+      <div class="search-row">
+        <input type="text" id="tree-search" placeholder="Search…" />
+      </div>
+      <div class="tree" id="tree"></div>
+    </aside>
+
+    <section class="viewport-host">
+      <canvas id="viewport"></canvas>
+      <div class="overlay overlay-bottomleft" id="hud">
+        <div><span class="hud-k">Camera:</span> drag = orbit · wheel = zoom · right-drag = pan</div>
+        <div><span class="hud-k">Selection:</span> click a mesh or a tree row</div>
+      </div>
+      <div class="overlay overlay-topleft" id="status">Loading…</div>
+    </section>
+
+    <aside class="pane pane-right">
+      <div class="pane-title">Properties</div>
+      <div class="props" id="props">
+        <div class="props-empty">Select an instance to inspect.</div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="statusbar">
+    <span id="fps">— fps</span>
+    <span class="sep">·</span>
+    <span id="renderinfo">— draws</span>
+    <span class="sep">·</span>
+    <span id="loader-status">three.js: loading</span>
+  </footer>
+
+  <script type="module" src="./preview-app.js"></script>
+</body>
+</html>

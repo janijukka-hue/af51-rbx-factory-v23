@@ -1,0 +1,92 @@
+{
+  "id": "obby",
+  "type": "obby",
+  "version": "1.0.0",
+  "gameName": "AF51-Obby",
+  "description": "Classic obstacle course with checkpoint progression",
+  "hierarchy": {
+    "extraDirs": [],
+    "datastoreNamespace": "Obby"
+  },
+  "runtime": {
+    "modules": [
+      "AF51Runtime.AuditRuntime",
+      "AF51Runtime.EventBus",
+      "AF51Runtime.StateStore",
+      "AF51Runtime.NetworkLayer",
+      "AF51Runtime.ServiceRegistry"
+    ],
+    "bootTimeout": 10
+  },
+  "remotes": {
+    "includeCore": true,
+    "targetExtensions": true
+  },
+  "ui": {
+    "systems": [
+      "HUD",
+      "Notifications",
+      "Menus",
+      "Inventory"
+    ]
+  },
+  "datastore": {
+    "namespace": "Obby_v1",
+    "keys": [
+      "PlayerData",
+      "Checkpoints",
+      "BestTimes"
+    ],
+    "autoSaveInterval": 60
+  },
+  "monetization": {
+    "currencies": [
+      "coins"
+    ],
+    "products": [],
+    "passes": [
+      "VIP",
+      "2xSpeed"
+    ]
+  },
+  "packaging": {
+    "defaultProfile": "development",
+    "allowedProfiles": [
+      "development",
+      "production",
+      "creator"
+    ]
+  },
+  "gameplay": {
+    "checkpoints": {
+      "enabled": true,
+      "saveOnTouch": true,
+      "respawnAtCheckpoint": true,
+      "partTag": "Checkpoint",
+      "maxCheckpoints": 100
+    },
+    "stages": {
+      "enabled": true,
+      "stageTag": "Stage",
+      "completionRemote": "StageComplete",
+      "trackBestTime": true
+    },
+    "respawn": {
+      "delay": 2.5,
+      "teleportToCheckpoint": true,
+      "resetVelocity": true,
+      "deathEvent": "runtime:player:death"
+    },
+    "timer": {
+      "enabled": true,
+      "countUp": true,
+      "persistBestTime": true,
+      "hudBinding": "HUD.Timer"
+    },
+    "physics": {
+      "characterSpeed": 16,
+      "jumpPower": 50,
+      "useCustomJump": false
+    }
+  }
+}

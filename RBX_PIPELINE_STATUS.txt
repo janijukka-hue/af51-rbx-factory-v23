@@ -1,0 +1,29 @@
+CURRENT STATUS
+
+PIPELINE: 16 stages (fail-fast, deterministic)
+  1 STERILITY        9  ROJO_EXPORT
+  2 HIERARCHY        10 ASSET_PACKAGE
+  3 RUNTIME_INJECT   11 ROJO_VALIDATE
+  4 LUAU_GEN         12 SIGN
+  5 REMOTE_BUILD     13 VALIDATE
+  6 UI_BUILD         14 PREVIEW_GEN
+  7 VISUAL_PRODUCTION 15 GHOST_SEAL
+  8 RBXLX_EMIT       16 ZIP_HARDEN
+
+CONFIRMED REAL:
+- Translator pipeline
+- Object graph generation
+- Build orchestration
+- RBXLX emit (AF51.rbxlx in ZIP — Studio opens place directly)
+- ZIP packaging (deterministic, epoch 1980-01-01)
+- Worker routing
+- UI race-condition guard (buildSeqRef + resetRbxBuildState helper)
+
+REMAINING RISK:
+- Renderer ownership contamination
+- Geometry fallback injection
+- Partial demo-target references
+
+CURRENT PHASE:
+Renderer purification + graph-truth enforcement.
+RBXLX_EMIT Palaset 1-3 complete (86/86 tests, 0 skipped 5/5 targets).

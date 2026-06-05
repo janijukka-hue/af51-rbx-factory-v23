@@ -1,0 +1,6 @@
+{
+  "deterministicZipRequired": true,
+  "snapshotRequired": true,
+  "vaultEntryRequired": true,
+  "partialExportForbidden": true
+}

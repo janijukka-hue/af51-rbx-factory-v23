@@ -1,0 +1,107 @@
+{
+  "id": "tycoon",
+  "type": "tycoon",
+  "version": "1.0.0",
+  "gameName": "AF51-Tycoon",
+  "description": "Empire-building tycoon with dropper economy",
+  "hierarchy": {
+    "extraDirs": [],
+    "datastoreNamespace": "Tycoon"
+  },
+  "runtime": {
+    "modules": [
+      "AF51Runtime.AuditRuntime",
+      "AF51Runtime.EventBus",
+      "AF51Runtime.StateStore",
+      "AF51Runtime.NetworkLayer",
+      "AF51Runtime.ServiceRegistry"
+    ],
+    "bootTimeout": 12
+  },
+  "remotes": {
+    "includeCore": true,
+    "targetExtensions": true
+  },
+  "ui": {
+    "systems": [
+      "HUD",
+      "Notifications",
+      "Menus",
+      "Inventory",
+      "Shop"
+    ]
+  },
+  "datastore": {
+    "namespace": "Tycoon_v1",
+    "keys": [
+      "PlayerData",
+      "TycoonState",
+      "Purchases",
+      "EmpireLevel"
+    ],
+    "autoSaveInterval": 30
+  },
+  "monetization": {
+    "currencies": [
+      "coins",
+      "gems"
+    ],
+    "products": [
+      "CoinsBundle100",
+      "CoinsBundle500",
+      "GemsBundle50"
+    ],
+    "passes": [
+      "VIP",
+      "DoubleDroppers",
+      "AutoCollect"
+    ]
+  },
+  "packaging": {
+    "defaultProfile": "development",
+    "allowedProfiles": [
+      "development",
+      "production",
+      "creator",
+      "marketplace"
+    ]
+  },
+  "gameplay": {
+    "moneyGeneration": {
+      "enabled": true,
+      "baseRatePerSecond": 1,
+      "currency": "coins",
+      "stateKey": "ECONOMY.coins",
+      "auditAllTransactions": true
+    },
+    "droppers": {
+      "enabled": true,
+      "dropperTag": "Dropper",
+      "dropInterval": 1.0,
+      "dropValue": 1,
+      "stackable": true,
+      "maxPerPlayer": 50,
+      "upgradeMultiplier": true
+    },
+    "upgradeSystem": {
+      "enabled": true,
+      "upgradeTag": "Upgrade",
+      "purchaseRemote": "PurchaseRequest",
+      "maxTier": 10,
+      "costFormula": "baseCost * (tier ^ 1.5)",
+      "persistUpgrades": true
+    },
+    "ownership": {
+      "enabled": true,
+      "ownershipTag": "TycoonOwner",
+      "claimOnJoin": true,
+      "maxTycoonsPerServer": 6,
+      "returnOnRejoin": true
+    },
+    "collection": {
+      "collectorTag": "Collector",
+      "collectRemote": "DropperTick",
+      "autoCollectPass": "AutoCollect"
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "id": "fps",
+  "type": "fps",
+  "version": "1.0.0",
+  "gameName": "AF51-FPS",
+  "description": "Server-authoritative first-person shooter",
+  "hierarchy": {
+    "extraDirs": [],
+    "datastoreNamespace": "FPS"
+  },
+  "runtime": {
+    "modules": [
+      "AF51Runtime.AuditRuntime",
+      "AF51Runtime.EventBus",
+      "AF51Runtime.StateStore",
+      "AF51Runtime.NetworkLayer",
+      "AF51Runtime.ServiceRegistry"
+    ],
+    "bootTimeout": 10
+  },
+  "remotes": {
+    "includeCore": true,
+    "targetExtensions": true
+  },
+  "ui": {
+    "systems": [
+      "HUD",
+      "Notifications",
+      "Menus"
+    ]
+  },
+  "datastore": {
+    "namespace": "FPS_v1",
+    "keys": [
+      "PlayerData",
+      "Stats",
+      "Loadout",
+      "MatchHistory"
+    ],
+    "autoSaveInterval": 60
+  },
+  "monetization": {
+    "currencies": [
+      "credits"
+    ],
+    "products": [
+      "CreditBundle1000",
+      "WeaponSkin",
+      "CharacterSkin"
+    ],
+    "passes": [
+      "VIP",
+      "ExtraLoadouts",
+      "2xCredits"
+    ]
+  },
+  "packaging": {
+    "defaultProfile": "development",
+    "allowedProfiles": [
+      "development",
+      "production",
+      "creator",
+      "marketplace"
+    ]
+  },
+  "gameplay": {
+    "weaponRegistry": {
+      "enabled": true,
+      "weapons": [
+        {
+          "id": "rifle",
+          "damage": 25,
+          "fireRate": 0.15,
+          "magazineSize": 30,
+          "reloadTime": 2.0,
+          "range": 500
+        },
+        {
+          "id": "shotgun",
+          "damage": 80,
+          "fireRate": 0.8,
+          "magazineSize": 8,
+          "reloadTime": 3.0,
+          "range": 50,
+          "pellets": 8
+        },
+        {
+          "id": "pistol",
+          "damage": 30,
+          "fireRate": 0.4,
+          "magazineSize": 15,
+          "reloadTime": 1.5,
+          "range": 200
+        },
+        {
+          "id": "sniper",
+          "damage": 150,
+          "fireRate": 1.5,
+          "magazineSize": 5,
+          "reloadTime": 3.5,
+          "range": 2000
+        }
+      ],
+      "loadoutStateKey": "INVENTORY.loadout"
+    },
+    "hitValidation": {
+      "mode": "server_authoritative",
+      "clientPrediction": true,
+      "maxLagCompensation": 0.2,
+      "hitRemote": "HitValidation",
+      "resultRemote": "HitResult",
+      "auditHitEvents": true,
+      "antiCheatChecks": [
+        "distance",
+        "fireRate",
+        "headshot_angle",
+        "velocity"
+      ]
+    },
+    "ammoSystem": {
+      "enabled": true,
+      "infiniteAmmoPass": null,
+      "ammoStateKey": "INVENTORY.ammo",
+      "reloadEvent": "runtime:weapon:reload",
+      "emptyEvent": "runtime:weapon:empty"
+    },
+    "replication": {
+      "strategy": "server_to_client",
+      "remotes": [
+        "ShootAction",
+        "HitResult",
+        "KillFeed",
+        "RespawnReady"
+      ],
+      "playerPositionUpdate": "PerFrame",
+      "cullingDistance": 500
+    },
+    "matchSystem": {
+      "enabled": true,
+      "modes": [
+        "TDM",
+        "FFA",
+        "CTF"
+      ],
+      "defaultMode": "TDM",
+      "scoreLimit": 30,
+      "timeLimit": 600,
+      "respawnDelay": 3.0,
+      "killFeedRemote": "KillFeed"
+    }
+  }
+}

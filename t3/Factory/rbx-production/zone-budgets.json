@@ -1,0 +1,27 @@
+{
+  "obby": {
+    "spawnZone":      { "minProps": 6,  "modules": ["pillars.capped", "floors.edgeStrip", "corners.stepped"] },
+    "obstacleZone":   { "minProps": 18, "modules": ["pillars.column", "supports.beam", "floors.edgeStrip", "corners.chamfer"] },
+    "finishZone":     { "minProps": 8,  "modules": ["pillars.capped", "doors.gateway", "corners.stepped"] }
+  },
+  "tycoon": {
+    "spawnZone":      { "minProps": 5,  "modules": ["pillars.column", "floors.edgeStrip"] },
+    "productionZone": { "minProps": 22, "modules": ["supports.truss", "supports.beam", "pillars.column", "windows.slit"] },
+    "perimeterZone":  { "minProps": 10, "modules": ["walls.segment", "walls.endCap", "walls.buttress"] }
+  },
+  "simulator": {
+    "spawnZone":      { "minProps": 6,  "modules": ["pillars.capped", "corners.stepped"] },
+    "arenaZone":      { "minProps": 24, "modules": ["pillars.tapered", "supports.truss", "floors.edgeStrip", "corners.chamfer"] },
+    "perimeterZone":  { "minProps": 12, "modules": ["walls.buttress", "pillars.column"] }
+  },
+  "fps": {
+    "spawnZone":      { "minProps": 6,  "modules": ["walls.segment", "supports.beam"] },
+    "combatZone":     { "minProps": 30, "modules": ["walls.segment", "walls.buttress", "supports.truss", "pillars.column", "windows.slit"] },
+    "perimeterZone":  { "minProps": 14, "modules": ["walls.endCap", "walls.buttress", "supports.brace"] }
+  },
+  "rpg": {
+    "spawnZone":      { "minProps": 6,  "modules": ["pillars.capped", "doors.frame"] },
+    "villageZone":    { "minProps": 26, "modules": ["doors.frame", "windows.frame", "walls.segment", "pillars.column", "floors.edgeStrip"] },
+    "perimeterZone":  { "minProps": 12, "modules": ["walls.segment", "walls.endCap", "pillars.capped"] }
+  }
+}

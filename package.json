@@ -1,0 +1,53 @@
+{
+  "license": "UNLICENSED",
+  "main": "index.js",
+  "scripts": {
+    "server": "node server.js",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "test:all": "node test-lua-factory.mjs && node test-future-machine.mjs && node test-rbxlx-emit.mjs && node test-recognizability.mjs && node test-ui-objects.mjs && node test-ui-bindings.mjs && node test-rbx-skills.mjs && node test-rbx-directors.mjs && node test-rbx-cockpit.mjs && node test-rbx-shared-build.mjs && node test-rbx-3d-engine.mjs && node test-rbx-humanoid-production.mjs",
+    "test:lua-factory": "node test-lua-factory.mjs",
+    "test:future-machine": "node test-future-machine.mjs",
+    "test:rbxlx-emit": "node test-rbxlx-emit.mjs",
+    "test:humanoid": "node test-rbx-humanoid-production.mjs",
+    "demo:humanoid": "node demo-humanoid-preview.mjs",
+    "detect": "node scripts/af51-detect.js",
+    "rbx:build": "node rbx.mjs build",
+    "rbx:build:obby": "node rbx.mjs build obby production",
+    "rbx:build:tycoon": "node rbx.mjs build tycoon production",
+    "rbx:build:simulator": "node rbx.mjs build simulator production",
+    "rbx:build:rpg": "node rbx.mjs build rpg production",
+    "rbx:build:fps": "node rbx.mjs build fps production",
+    "rbx:build:all": "node scripts/rbx-build-all.mjs",
+    "rbx:verify": "node scripts/rbx-verify.mjs",
+    "rbx:pack-sales": "node scripts/rbx-pack-sales.mjs",
+    "rbx:list": "node rbx.mjs list"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~6.1.2",
+    "@react-navigation/bottom-tabs": "6.5.20",
+    "@react-navigation/native": "6.1.18",
+    "@react-navigation/native-stack": "6.9.26",
+    "archiver": "^7.0.1",
+    "expo": "~54.0.33",
+    "expo-status-bar": "~3.0.9",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "react-native-web": "^0.21.0",
+    "react-native-webview": "13.15.0",
+    "yauzl": "^3.3.1"
+  },
+  "private": true,
+  "type": "module",
+  "author": "Jani Segerman",
+  "devDependencies": {
+    "babel-preset-expo": "~54.0.0",
+    "@babel/core": "^7.25.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "pipeline": [
+    "build",
+    "validate",
+    "generate-roblox-structure",
+    "generate-assets",
+    "generate-manifest",
+    "snapshot",
+    "vault",
+    "zip-export",
+    "publish"
+  ],
+  "mode": "deterministic",
+  "failStrategy": "fail-fast",
+  "silentCorrection": false
+}

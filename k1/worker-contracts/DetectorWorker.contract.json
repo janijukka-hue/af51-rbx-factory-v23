@@ -1,0 +1,8 @@
+{
+  "input": "raw_source",
+  "output": "mode",
+  "forbidden": [
+    "rendering",
+    "scene_generation"
+  ]
+}

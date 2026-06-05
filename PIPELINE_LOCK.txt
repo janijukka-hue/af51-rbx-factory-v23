@@ -1,0 +1,21 @@
+AF51 RBX PIPELINE LOCK
+
+RULES:
+1. Translator object graph is the ONLY source of truth.
+2. Preview workers must render translator output directly.
+3. Demo scenes are fallback-only.
+4. No renderer may generate hidden replacement geometry.
+5. Worker chain must preserve:
+   - position
+   - size
+   - color
+   - type
+   - hierarchy
+
+TARGET FLOW:
+DetectorWorker
+ -> TranslatorWorker
+ -> ObjectGraphWorker
+ -> PreviewWorker
+ -> ArtifactWorker
+ -> ZipWorker

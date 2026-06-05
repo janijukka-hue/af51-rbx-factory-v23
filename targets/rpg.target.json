@@ -1,0 +1,129 @@
+{
+  "id": "rpg",
+  "type": "rpg",
+  "version": "1.0.0",
+  "gameName": "AF51-RPG",
+  "description": "Action RPG with combat, quests, and dialogue",
+  "hierarchy": {
+    "extraDirs": [],
+    "datastoreNamespace": "RPG"
+  },
+  "runtime": {
+    "modules": [
+      "AF51Runtime.AuditRuntime",
+      "AF51Runtime.EventBus",
+      "AF51Runtime.StateStore",
+      "AF51Runtime.NetworkLayer",
+      "AF51Runtime.ServiceRegistry"
+    ],
+    "bootTimeout": 15
+  },
+  "remotes": {
+    "includeCore": true,
+    "targetExtensions": true
+  },
+  "ui": {
+    "systems": [
+      "HUD",
+      "Notifications",
+      "Menus",
+      "Inventory",
+      "Shop"
+    ]
+  },
+  "datastore": {
+    "namespace": "RPG_v1",
+    "keys": [
+      "PlayerData",
+      "CharacterStats",
+      "QuestLog",
+      "Inventory",
+      "DialogueState"
+    ],
+    "autoSaveInterval": 30
+  },
+  "monetization": {
+    "currencies": [
+      "gold",
+      "gems"
+    ],
+    "products": [
+      "GoldBundle500",
+      "GemBundle100",
+      "StarterKit"
+    ],
+    "passes": [
+      "VIP",
+      "ExtraSlots",
+      "XPBoost",
+      "PremiumMount"
+    ]
+  },
+  "packaging": {
+    "defaultProfile": "development",
+    "allowedProfiles": [
+      "development",
+      "production",
+      "creator",
+      "marketplace"
+    ]
+  },
+  "gameplay": {
+    "characterStats": {
+      "stateKey": "PLAYER_PROGRESSION",
+      "baseStats": {
+        "health": 100,
+        "maxHealth": 100,
+        "attack": 10,
+        "defense": 5,
+        "speed": 16,
+        "level": 1,
+        "xp": 0
+      },
+      "statCapFormula": "base * (level ^ 0.8)",
+      "persistStats": true
+    },
+    "questSystem": {
+      "enabled": true,
+      "questRegistryKey": "INVENTORY.quests",
+      "maxActiveQuests": 5,
+      "questUpdateRemote": "QuestUpdate",
+      "questCompleteEvent": "runtime:quest:complete",
+      "objectiveTypes": [
+        "kill",
+        "collect",
+        "reach",
+        "talk"
+      ]
+    },
+    "enemyRegistry": {
+      "enabled": true,
+      "enemyTag": "Enemy",
+      "enemyTypes": [
+        "Goblin",
+        "Orc",
+        "Dragon",
+        "Skeleton",
+        "Boss"
+      ],
+      "serverAuthoritativeDeath": true,
+      "lootTableKey": "loot"
+    },
+    "combatState": {
+      "combatRemote": "CombatAction",
+      "resultRemote": "CombatResult",
+      "hitValidation": "server",
+      "damageFormula": "attack - (target.defense * 0.5)",
+      "critChance": 0.1,
+      "critMultiplier": 2.0,
+      "auditCombatEvents": true
+    },
+    "dialogueSystem": {
+      "enabled": true,
+      "openRemote": "DialogueOpen",
+      "choiceRemote": "DialogueChoice",
+      "npcTag": "NPC",
+      "dialogueStateKey": "INVENTORY.dialogueFlags"
+    }
+  }
+}

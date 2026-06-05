@@ -1,0 +1,8 @@
+{
+  "input": "lua_source",
+  "output": "normalized_object_graph",
+  "forbidden": [
+    "preview_rendering",
+    "runtime_geometry"
+  ]
+}

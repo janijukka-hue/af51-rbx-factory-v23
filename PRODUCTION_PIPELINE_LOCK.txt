@@ -1,0 +1,19 @@
+AF51 RBX PRODUCTION LOCK
+
+Authoritative flow:
+
+Lua Source
+ -> TranslatorWorker
+ -> ObjectGraph
+ -> PreviewWorker
+ -> ArtifactWorker
+ -> ZipWorker
+
+Forbidden:
+- hidden geometry
+- fake object injection
+- demo scene ownership
+- fallback render replacement
+
+Required:
+graph object count == rendered object count

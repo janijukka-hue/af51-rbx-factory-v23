@@ -1,0 +1,27 @@
+AF51 RBX PIPELINE AUDIT
+
+AUDIT RESULT:
+The runtime foundation is real and operational.
+
+CONFIRMED:
+- Build orchestration (16 stages, fail-fast)
+- Lua detection
+- Translator pipeline
+- RBXLX emit (stage 8: AF51.rbxlx whitelisted into ZIP)
+- ZIP packaging (deterministic epoch 1980-01-01)
+- Signing
+- Preview runtime
+- Worker routing
+
+MAIN ISSUE:
+Demo fallback ownership inside preview layer.
+
+CORRECTED DIRECTION:
+Translator object graph becomes authoritative source-of-truth.
+
+LOCKED RULES:
+1. Workers may not invent geometry.
+2. Preview must render translator data directly.
+3. Demo scenes are fallback-only.
+4. Translator output propagates unchanged through pipeline.
+5. Worker responsibilities are isolated and deterministic.

@@ -1,0 +1,7 @@
+{
+  "snapshotRequiredForExport": true,
+  "deterministicZipRequired": true,
+  "stableManifestRequired": true,
+  "assetReferenceValidation": true,
+  "rollbackOnFailure": true
+}

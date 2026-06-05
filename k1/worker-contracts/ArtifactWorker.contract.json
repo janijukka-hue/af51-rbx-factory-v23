@@ -1,0 +1,7 @@
+{
+  "input": "normalized_object_graph",
+  "output": "rbx_artifact",
+  "forbidden": [
+    "preview_logic"
+  ]
+}

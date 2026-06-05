@@ -1,0 +1,13 @@
+RBX LIVE DEBUG OVERLAY
+
+REQUIRED UI VALUES
+
+Translator objects:
+Preview objects:
+Rendered objects:
+
+Renderer state:
+GRAPH_ONLY / FALLBACK / ERROR
+
+RULE:
+expected render count must equal actual render count.

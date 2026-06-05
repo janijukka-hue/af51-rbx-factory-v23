@@ -1,0 +1,30 @@
+{
+  "id": "production",
+  "type": "production",
+  "version": "1.0.0",
+  "description": "Production build — optimized, hardened, audit-only logging",
+  "optimizations": {
+    "minify": true,
+    "stripDebug": true,
+    "inlineConstants": true,
+    "deadCodeElimination": true
+  },
+  "validation": {
+    "strict": true,
+    "allowWarn": false,
+    "requireAllRemotes": true,
+    "requireAuditChain": true
+  },
+  "export": {
+    "compressAssets": true,
+    "includeSourceMaps": false,
+    "embedManifest": true,
+    "maxZipSizeMB": 500
+  },
+  "runtime": {
+    "logLevel": "error",
+    "auditFlushInterval": 60,
+    "enableRuntimeOverlay": false,
+    "enablePerformanceStats": false
+  }
+}

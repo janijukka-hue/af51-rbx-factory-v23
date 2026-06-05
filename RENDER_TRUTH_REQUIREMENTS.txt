@@ -1,0 +1,16 @@
+RENDER TRUTH REQUIREMENTS
+
+Renderer must:
+- render ALL translated objects
+- preserve position
+- preserve size
+- preserve color
+
+Forbidden:
+- hidden geometry
+- fallback object injection
+- demo ownership
+- default replacement cubes
+
+Validation target:
+translator object count == rendered object count

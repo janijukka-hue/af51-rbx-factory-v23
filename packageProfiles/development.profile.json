@@ -1,0 +1,34 @@
+{
+  "id": "development",
+  "type": "development",
+  "version": "1.0.0",
+  "description": "Development build — verbose logging, Studio overlays enabled, no minification",
+  "optimizations": {
+    "minify": false,
+    "stripDebug": false,
+    "inlineConstants": false,
+    "deadCodeElimination": false
+  },
+  "validation": {
+    "strict": true,
+    "allowWarn": true,
+    "requireAllRemotes": true,
+    "requireAuditChain": true
+  },
+  "export": {
+    "compressAssets": false,
+    "includeSourceMaps": true,
+    "embedManifest": true,
+    "maxZipSizeMB": 100
+  },
+  "runtime": {
+    "logLevel": "debug",
+    "auditFlushInterval": 10,
+    "enableRuntimeOverlay": true,
+    "enablePerformanceStats": true
+  },
+  "devDependencies": {
+    "AF51Dev.RuntimeInspector": "1.0.0",
+    "AF51Dev.StateDebugger": "1.0.0"
+  }
+}

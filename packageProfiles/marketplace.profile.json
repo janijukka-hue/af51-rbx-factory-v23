@@ -1,0 +1,38 @@
+{
+  "id": "marketplace",
+  "type": "marketplace",
+  "version": "1.0.0",
+  "description": "Roblox Marketplace publish — signed, hardened, attribution locked",
+  "optimizations": {
+    "minify": true,
+    "stripDebug": true,
+    "inlineConstants": true,
+    "deadCodeElimination": true
+  },
+  "validation": {
+    "strict": true,
+    "allowWarn": false,
+    "requireAllRemotes": true,
+    "requireAuditChain": true,
+    "requireSignature": true
+  },
+  "export": {
+    "compressAssets": true,
+    "includeSourceMaps": false,
+    "embedManifest": true,
+    "signPackage": true,
+    "maxZipSizeMB": 500
+  },
+  "runtime": {
+    "logLevel": "warn",
+    "auditFlushInterval": 120,
+    "enableRuntimeOverlay": false,
+    "enablePerformanceStats": false
+  },
+  "marketplace": {
+    "licenseType": "AF51-Marketplace",
+    "redistributable": false,
+    "requireAttribution": true,
+    "royaltyModel": "none"
+  }
+}

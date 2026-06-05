@@ -1,0 +1,17 @@
+WEB RUNTIME FIX APPLIED
+
+Changes:
+- Web-safe orchestrator lazy loading
+- Metro resolver split
+- runtime.web.js / runtime.node.js separation
+- config.web.js / config.node.js separation
+- Optional chaining for getFactory()
+- import.meta leak isolation
+
+Start:
+
+Server:
+node server.js
+
+Metro:
+npx expo start --clear

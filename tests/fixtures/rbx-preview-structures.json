@@ -1,0 +1,239 @@
+{
+  "empty": {
+    "structures": []
+  },
+  "tenParts": {
+    "structures": [
+      {
+        "id": "n1",
+        "luaClass": "Part",
+        "label": "BLOCK_1",
+        "shape": "Block",
+        "material": "Neon",
+        "color": "#00FF8C",
+        "x": 0,
+        "y": 4,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "parent": "workspace",
+        "glow": true
+      },
+      {
+        "id": "n2",
+        "luaClass": "Part",
+        "label": "BLOCK_2",
+        "shape": "Block",
+        "material": "Metal",
+        "color": "#0088FF",
+        "x": 8,
+        "y": 4,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "parent": "workspace",
+        "glow": false
+      }
+    ]
+  },
+  "shapes": {
+    "structures": [
+      {
+        "id": "s1",
+        "luaClass": "Part",
+        "label": "BALL",
+        "shape": "Ball",
+        "material": "Neon",
+        "color": "#FF00FF",
+        "x": 0,
+        "y": 2,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "parent": "workspace",
+        "glow": true
+      },
+      {
+        "id": "s2",
+        "luaClass": "Part",
+        "label": "CYL",
+        "shape": "Cylinder",
+        "material": "SmoothPlastic",
+        "color": "#FFD700",
+        "x": 6,
+        "y": 2,
+        "z": 0,
+        "w": 2,
+        "h": 4,
+        "d": 2,
+        "parent": "workspace",
+        "glow": false
+      },
+      {
+        "id": "s3",
+        "luaClass": "Part",
+        "label": "CUBE",
+        "shape": "Block",
+        "material": "Metal",
+        "color": "#888888",
+        "x": -6,
+        "y": 2,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "parent": "workspace",
+        "glow": false
+      }
+    ]
+  },
+  "ui": {
+    "structures": [
+      {
+        "id": "u1",
+        "luaClass": "ScreenGui",
+        "label": "AF51_HUD",
+        "type": "ui",
+        "color": "#2D7FF9",
+        "parent": "PlayerGui"
+      },
+      {
+        "id": "u2",
+        "luaClass": "Frame",
+        "label": "HUD_FRAME",
+        "type": "ui",
+        "color": "#3D8FE0",
+        "parent": "AF51_HUD"
+      },
+      {
+        "id": "u3",
+        "luaClass": "TextLabel",
+        "label": "HUD_TITLE",
+        "type": "ui",
+        "color": "#46C0FF",
+        "parent": "HUD_FRAME"
+      },
+      {
+        "id": "u4",
+        "luaClass": "SurfaceGui",
+        "label": "SIGN_UI",
+        "type": "ui",
+        "color": "#2D7FF9",
+        "parent": "sign"
+      },
+      {
+        "id": "u5",
+        "luaClass": "BillboardGui",
+        "label": "NAMEPLATE",
+        "type": "ui",
+        "color": "#2D7FF9",
+        "parent": "head"
+      }
+    ]
+  },
+  "unresolved": {
+    "structures": [
+      {
+        "id": "x1",
+        "luaClass": "Part",
+        "label": "ORPHAN",
+        "shape": "Block",
+        "color": "#FF0000",
+        "x": 0,
+        "y": 1,
+        "z": 0,
+        "w": 4,
+        "h": 1,
+        "d": 4,
+        "parent": "",
+        "glow": false
+      }
+    ]
+  },
+  "missingFields": {
+    "structures": [
+      {
+        "luaClass": "Part",
+        "label": "NOSIZE",
+        "parent": "workspace"
+      },
+      {
+        "label": "NOCLASS",
+        "parent": "workspace"
+      },
+      {
+        "luaClass": "Part"
+      }
+    ]
+  },
+  "picking": {
+    "blocks": [
+      {
+        "__id": "left",
+        "x": -20,
+        "y": 2,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "shape": "Block",
+        "label": "LEFT"
+      },
+      {
+        "__id": "center",
+        "x": 0,
+        "y": 2,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "shape": "Block",
+        "label": "CENTER"
+      },
+      {
+        "__id": "right",
+        "x": 20,
+        "y": 2,
+        "z": 0,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "shape": "Block",
+        "label": "RIGHT"
+      }
+    ],
+    "overlap": [
+      {
+        "__id": "back",
+        "x": 0,
+        "y": 2,
+        "z": -10,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "shape": "Block"
+      },
+      {
+        "__id": "front",
+        "x": 0,
+        "y": 2,
+        "z": 10,
+        "w": 4,
+        "h": 4,
+        "d": 4,
+        "shape": "Block"
+      }
+    ],
+    "bounds": {
+      "minX": -22,
+      "maxX": 22,
+      "minY": 0,
+      "maxY": 4,
+      "minZ": -2,
+      "maxZ": 2
+    }
+  }
+}

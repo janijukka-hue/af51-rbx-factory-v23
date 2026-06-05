@@ -1,0 +1,16 @@
+TRANSLATOR EXPORT AUDIT
+
+Detected exports:
+No named exports detected
+
+ACTION:
+Added deterministic adapter export:
+
+translateLuaToRBXObjects(source)
+
+Purpose:
+Provide stable runtime contract for:
+- runtime tests
+- PreviewWorker
+- ObjectGraphWorker
+- future artifact pipeline

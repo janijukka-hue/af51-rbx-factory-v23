@@ -1,0 +1,6 @@
+{
+  "luaParsingRequired": true,
+  "astRequired": true,
+  "semanticAnalysisRequired": true,
+  "objectGraphRequired": true
+}

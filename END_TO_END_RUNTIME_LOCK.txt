@@ -1,0 +1,21 @@
+AF51 END-TO-END LOCK
+
+Authoritative flow:
+
+Lua
+ -> translateLuaToRBXObjects
+ -> ObjectGraph
+ -> PreviewWorker
+ -> ArtifactWorker
+ -> ZipWorker
+
+Renderer rules:
+- render ONLY graph.objects
+- no hidden geometry
+- no fallback cubes
+- no procedural replacement scene
+
+Translator rules:
+- deterministic regex parsing
+- push all objects into graph
+- objectCount must equal objects.length

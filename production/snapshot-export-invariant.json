@@ -1,0 +1,6 @@
+{
+  "snapshotRequired": true,
+  "vaultEntryRequired": true,
+  "artifactHashRequired": true,
+  "exportBlockedWithoutSnapshot": true
+}

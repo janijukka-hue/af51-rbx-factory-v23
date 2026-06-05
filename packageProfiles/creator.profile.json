@@ -1,0 +1,37 @@
+{
+  "id": "creator",
+  "type": "creator",
+  "version": "1.0.0",
+  "description": "Creator Hub distribution — source-included, marketplace-ready metadata",
+  "optimizations": {
+    "minify": false,
+    "stripDebug": false,
+    "inlineConstants": false,
+    "deadCodeElimination": false
+  },
+  "validation": {
+    "strict": true,
+    "allowWarn": true,
+    "requireAllRemotes": true,
+    "requireAuditChain": true
+  },
+  "export": {
+    "compressAssets": false,
+    "includeSourceMaps": true,
+    "embedManifest": true,
+    "includeReadme": true,
+    "includeChangelog": true,
+    "maxZipSizeMB": 200
+  },
+  "runtime": {
+    "logLevel": "info",
+    "auditFlushInterval": 30,
+    "enableRuntimeOverlay": true,
+    "enablePerformanceStats": false
+  },
+  "marketplace": {
+    "licenseType": "AF51-Creator",
+    "redistributable": true,
+    "requireAttribution": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "stableOrdering": true,
+  "stableManifest": true,
+  "stablePaths": true,
+  "stableHashes": true,
+  "randomTempNamesAllowed": false,
+  "canonicalArtifactPattern": "artifact_<snapshotId>.zip"
+}

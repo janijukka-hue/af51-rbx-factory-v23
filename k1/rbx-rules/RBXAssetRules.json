@@ -1,0 +1,6 @@
+{
+  "missingAssetsFail": true,
+  "duplicateAssetIdsFail": true,
+  "brokenReferencesFail": true,
+  "stableAssetIdsRequired": true
+}

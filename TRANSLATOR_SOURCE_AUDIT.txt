@@ -1,0 +1,23 @@
+AF51 RBX TRANSLATOR SOURCE AUDIT
+
+FILE:
+t3/roblox-rbx/lua-translator.js
+
+KEYWORD CHECKS:
+
+Instance.new: FOUND
+Vector3.new: FOUND
+Color3.fromRGB: FOUND
+match(: FOUND
+regex: MISSING
+objects.push: FOUND
+return: FOUND
+
+RESULT:
+
+Translator runtime contract now works,
+but parser implementation appears incomplete
+or disconnected from export flow.
+
+Next engineering task:
+TRACE parser internals step-by-step.

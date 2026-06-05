@@ -1,0 +1,121 @@
+{
+  "id": "simulator",
+  "type": "simulator",
+  "version": "1.0.0",
+  "gameName": "AF51-Simulator",
+  "description": "Click-based simulator with prestige system",
+  "hierarchy": {
+    "extraDirs": [],
+    "datastoreNamespace": "Simulator"
+  },
+  "runtime": {
+    "modules": [
+      "AF51Runtime.AuditRuntime",
+      "AF51Runtime.EventBus",
+      "AF51Runtime.StateStore",
+      "AF51Runtime.NetworkLayer",
+      "AF51Runtime.ServiceRegistry"
+    ],
+    "bootTimeout": 10
+  },
+  "remotes": {
+    "includeCore": true,
+    "targetExtensions": true
+  },
+  "ui": {
+    "systems": [
+      "HUD",
+      "Notifications",
+      "Menus",
+      "Inventory",
+      "Shop"
+    ]
+  },
+  "datastore": {
+    "namespace": "Simulator_v1",
+    "keys": [
+      "PlayerData",
+      "Resources",
+      "Upgrades",
+      "PrestigeCount",
+      "PetData"
+    ],
+    "autoSaveInterval": 45
+  },
+  "monetization": {
+    "currencies": [
+      "coins",
+      "gems"
+    ],
+    "products": [
+      "StarterPack",
+      "MegaBundle"
+    ],
+    "passes": [
+      "VIP",
+      "AutoClick",
+      "2xResources",
+      "PetSlots"
+    ]
+  },
+  "packaging": {
+    "defaultProfile": "development",
+    "allowedProfiles": [
+      "development",
+      "production",
+      "creator",
+      "marketplace"
+    ]
+  },
+  "gameplay": {
+    "clickSystem": {
+      "enabled": true,
+      "clickRemote": "ClickAction",
+      "clickValue": 1,
+      "clickMultiplierKey": "PLAYER_PROGRESSION.clickMultiplier",
+      "autoClickPass": "AutoClick",
+      "autoClickRate": 5,
+      "serverAuthoritativeOnly": true
+    },
+    "progression": {
+      "resourceKey": "ECONOMY.coins",
+      "levelKey": "PLAYER_PROGRESSION.level",
+      "xpKey": "PLAYER_PROGRESSION.xp",
+      "levelThresholds": [
+        100,
+        500,
+        1500,
+        5000,
+        15000,
+        50000
+      ],
+      "onLevelUp": "runtime:player:levelup"
+    },
+    "inventory": {
+      "enabled": true,
+      "maxSlots": 20,
+      "upgradeSlotPass": "PetSlots",
+      "stateKey": "INVENTORY.items"
+    },
+    "petSystem": {
+      "enabled": true,
+      "petRegistryKey": "INVENTORY.pets",
+      "maxActivePets": 3,
+      "petBonusType": "multiplier",
+      "persistPets": true
+    },
+    "prestigeSystem": {
+      "enabled": true,
+      "prestigeRemote": "PrestigeRequest",
+      "prestigeResetKeys": [
+        "ECONOMY.coins",
+        "PLAYER_PROGRESSION.level",
+        "PLAYER_PROGRESSION.xp"
+      ],
+      "prestigePreserveKeys": [
+        "INVENTORY.pets"
+      ],
+      "prestigeMultiplierBonus": 0.1
+    }
+  }
+}

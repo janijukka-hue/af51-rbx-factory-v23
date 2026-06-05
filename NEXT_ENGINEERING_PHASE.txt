@@ -1,0 +1,18 @@
+NEXT ENGINEERING PHASE
+
+The remaining work is REAL renderer refactoring.
+
+Required:
+1. Remove remaining hardcoded geometry generators.
+2. Bind preview canvas directly to translatorGraphToPreview().
+3. Verify renderer loops over ALL objects.
+4. Validate:
+   translator count == rendered count.
+5. Add visual debug overlay for:
+   - object IDs
+   - positions
+   - sizes
+6. Add deterministic graph snapshots.
+
+This package disables major demo ownership patterns,
+but final renderer verification must still be tested live.

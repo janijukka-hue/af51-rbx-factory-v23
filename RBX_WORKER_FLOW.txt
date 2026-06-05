@@ -1,0 +1,27 @@
+AF51 RBX WORKER FLOW
+
+REAL AUTHORITATIVE FLOW
+
+DetectorWorker
+ -> detects source type only
+
+TranslatorWorker
+ -> converts Lua into deterministic RBX object graph
+
+ObjectGraphWorker
+ -> validates graph
+ -> preserves ordering
+ -> preserves object counts
+
+PreviewWorker
+ -> renders EXACT graph objects
+ -> forbidden from generating replacement geometry
+
+ArtifactWorker
+ -> packages graph into RBX artifact
+
+ZipWorker
+ -> exports artifact only
+
+RULE:
+Rendered object count MUST equal translator object count.

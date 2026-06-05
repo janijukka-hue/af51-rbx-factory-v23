@@ -1,0 +1,12 @@
+SMOKE TEST PHASE ACTIVE
+
+Goal:
+Verify that translator object graph is the active runtime truth.
+
+Focus:
+- object counts
+- render loop
+- geometry mapping
+- fallback detection
+
+No new feature work before validation passes.

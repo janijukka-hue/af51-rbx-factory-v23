@@ -1,0 +1,8 @@
+{
+  "input": "rbx_artifact",
+  "output": "zip_export",
+  "forbidden": [
+    "scene_logic",
+    "translator_logic"
+  ]
+}

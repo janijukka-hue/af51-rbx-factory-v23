@@ -1,0 +1,11 @@
+AF51 RBX PIPELINE CLEANUP
+
+DONE:
+- Demo scene ownership marked as fallback-only
+- Translator object graph normalization added
+- Preview layer prepared for translator-driven rendering
+- Lua translator marked as authoritative source-of-truth
+
+NEXT STEP FOR CLAUDE:
+Connect PreviewWorker -> translator object graph directly.
+Remove remaining SCENES ownership from render loop.

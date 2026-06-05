@@ -24,13 +24,26 @@ var MAX_PARTS = 1500; // performance guardrail — beyond this we cap rendered m
 
 function buildEngineDoc(structures, meta) {
   // Only 3D structures (UI is overlaid separately by the host component).
+  // INCLUSIVE filter: render everything except explicit UI classes.
   var blocks = structures.filter(function (s) {
-    return s.type !== "ui" && (s.role !== "ui-element");
+    // Exclude UI elements by role
+    if (s.role === "ui-element") return false;
+    // Exclude UI by luaClass (ScreenGui, Frame, TextLabel, etc.)
+    if (s.luaClass && /^(ScreenGui|Frame|TextLabel|TextButton|TextBox|ImageLabel|ImageButton|ScrollingFrame|SurfaceGui|BillboardGui|UIListLayout|UIGridLayout|UICorner)$/.test(s.luaClass)) return false;
+    // Exclude UI by type (fallback for legacy structures)
+    if (s.type === "ui") return false;
+    // Include everything else (platforms, buildings, lights, effects, humanoids)
+    return true;
   }).slice(0, MAX_PARTS);
 
   var data = JSON.stringify(blocks);
   var accent = (meta && meta.accent) || "#8EFF66";
   var selectedId = (meta && meta.selectedId) || "";
+
+  // Debug: log filter stats
+  if (typeof console !== "undefined" && structures.length > 0) {
+    console.log("[RbxPreviewEngine] Structures:", structures.length, "→ Blocks rendered:", blocks.length);
+  }
 
   // The iframe document: loads Three.js as an ES module from CDN and builds
   // the scene from `BLOCKS`. All logic is self-contained; the host only passes

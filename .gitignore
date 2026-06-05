@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+
+# Misc
+*.zip
+*.tar.gz
+*.tar
+af51-rbx-factory-v22.zip
+af51-rbx-factory-v23-humanoid-upgrade.tar.gz
+af51-rbx-factory-v23-humanoid-upgrade.tar.gz.part-*
+
+# Exports
+exports-rbx/
+
+# Temp
+tmp/
+temp/

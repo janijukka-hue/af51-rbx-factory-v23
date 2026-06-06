@@ -113,8 +113,8 @@ async function test() {
     const tests = [
       { name: 'Skills Ring initialized', pass: ring != null },
       { name: 'Governor created', pass: governor != null },
-      { name: '14 skills registered', pass: stats.totalSkills === 14 },
-      { name: '4 domains active', pass: stats.domains.filter(d => d.skillCount > 0).length === 4 },
+      { name: '54 skills registered', pass: stats.totalSkills === 54 },
+      { name: '12 domains active', pass: stats.domains.filter(d => d.skillCount > 0).length === 12 },
       { name: 'Skills executed', pass: finalStats.totalExecutions > 0 },
       { name: 'Semantic analysis available', pass: ring.findByCapability('semantic-analysis').length > 0 },
       { name: 'Vehicle analysis available', pass: ring.findByCapability('vehicle-analysis').length > 0 },

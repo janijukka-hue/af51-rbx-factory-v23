@@ -39,7 +39,8 @@ function RbxDesignReportPanel(props) {
   var report = props.report;
   var studio = props.studio;
   var shots = props.shots;
-  if (!report && !studio) {
+  var diagnostics = props.diagnostics;
+  if (!report && !studio && !diagnostics) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Design Report</Text>
@@ -73,6 +74,32 @@ function RbxDesignReportPanel(props) {
             return <Text key={"warn" + i} style={styles.warn}>• {w}</Text>;
           })}
           {studio.runtimeNote ? <Text style={styles.note}>{studio.runtimeNote}</Text> : null}
+        </View>
+      ) : null}
+
+      {diagnostics ? (
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Parser Diagnostics · v65 capabilities</Text>
+          <View style={styles.diagRow}>
+            <Text style={styles.diagLabel}>Direct instances</Text>
+            <Text style={styles.diagValue}>{diagnostics.direct || 0}</Text>
+            <Text style={styles.diagDesc}>Instance.new() calls</Text>
+          </View>
+          <View style={styles.diagRow}>
+            <Text style={styles.diagLabel}>Factory expansion</Text>
+            <Text style={styles.diagValue}>{diagnostics.factory || 0}</Text>
+            <Text style={styles.diagDesc}>makePart/makeNPC/makeTool</Text>
+          </View>
+          <View style={styles.diagRow}>
+            <Text style={styles.diagLabel}>UI Overlays</Text>
+            <Text style={styles.diagValue}>{diagnostics.surfaceGui || 0}</Text>
+            <Text style={styles.diagDesc}>SurfaceGui/BillboardGui</Text>
+          </View>
+          <View style={styles.diagRow}>
+            <Text style={styles.diagLabel}>Parent resolution</Text>
+            <Text style={styles.diagValue}>{diagnostics.parentResolved || 0}</Text>
+            <Text style={styles.diagDesc}>Variable → object name</Text>
+          </View>
         </View>
       ) : null}
 
@@ -110,6 +137,10 @@ var styles = StyleSheet.create({
   note: { ...TYPOGRAPHY.caption, color: COLORS.text.muted, fontStyle: "italic", marginTop: SPACING.xs },
   shot: { ...TYPOGRAPHY.caption, color: COLORS.text.primary, marginVertical: 2 },
   shotEv: { color: COLORS.text.muted },
+  diagRow: { flexDirection: "row", alignItems: "center", marginVertical: 3, paddingVertical: 2 },
+  diagLabel: { ...TYPOGRAPHY.caption, color: COLORS.text.secondary, width: 120, fontSize: 10 },
+  diagValue: { ...TYPOGRAPHY.caption, color: COLORS.accent.primary || "#00D9FF", fontWeight: "700", width: 30, textAlign: "right", fontSize: 11 },
+  diagDesc: { ...TYPOGRAPHY.caption, color: COLORS.text.muted, marginLeft: 8, fontSize: 9, fontFamily: "monospace" },
 });
 
 export { RbxDesignReportPanel };

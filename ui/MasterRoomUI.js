@@ -108,6 +108,10 @@ function MasterRoomUI(props) {
   var rbxShotsState = useState(null);
   var rbxShots = rbxShotsState[0];
   var setRbxShots = rbxShotsState[1];
+  // v65: Parser diagnostics (factory expansion, parent resolution, etc.)
+  var rbxDiagnosticsState = useState(null);
+  var rbxDiagnostics = rbxDiagnosticsState[0];
+  var setRbxDiagnostics = rbxDiagnosticsState[1];
 
   // Reset every RBX-build-derived UI surface back to empty. Used at the start
   // of each new build (so stale ZIP / preview / quality report disappear
@@ -133,6 +137,7 @@ function MasterRoomUI(props) {
     setRbxDesignReport(null);
     setRbxStudioReport(null);
     setRbxShots(null);
+    setRbxDiagnostics(null);
   }, []);
 
   var selectedIdState = useState(null);
@@ -414,6 +419,7 @@ function MasterRoomUI(props) {
               setRbxDesignReport(luaData.design || null);
               setRbxStudioReport(luaData.studio || null);
               setRbxShots(luaData.shots || null);
+              setRbxDiagnostics(luaData.diagnostics || null);
               // Publish to shared state so the Cockpit reflects this build too.
               appActions.setLatestBuild(normalizeLuaBuild(rawInput, luaData));
 
@@ -910,11 +916,12 @@ function MasterRoomUI(props) {
                     return null;
                   })()}
                 />
-                {(rbxDesignReport || rbxStudioReport) ? (
+                {(rbxDesignReport || rbxStudioReport || rbxDiagnostics) ? (
                   <RbxDesignReportPanel
                     report={rbxDesignReport}
                     studio={rbxStudioReport}
                     shots={rbxShots}
+                    diagnostics={rbxDiagnostics}
                     style={{ marginTop: 12 }}
                   />
                 ) : null}

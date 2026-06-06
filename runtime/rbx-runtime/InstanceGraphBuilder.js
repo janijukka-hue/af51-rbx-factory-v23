@@ -49,7 +49,9 @@ function rgbHex(c) {
 }
 
 function parseValue(raw) {
-  const r = raw.trim();
+  if (raw == null || raw === undefined) return null;
+  const r = String(raw).trim();
+  if (!r) return null;
   if (/Vector3\.new/.test(r)) return parseVector3(r);
   if (/Color3\./.test(r))     return parseColor3(r);
   if (/BrickColor\.new/.test(r)) return parseBrickColor(r);
@@ -81,6 +83,7 @@ export class InstanceGraphBuilder {
             parent: 'workspace',
             parentVar: null,
             properties: {},
+            source: node.source || 'direct', // v65: Track source (direct vs expanded_*)
           };
           byVar[node.varName] = obj;
           order.push(obj);

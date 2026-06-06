@@ -188,6 +188,7 @@ export class PreviewRenderer {
         shape: resolveShape(node, p, meshShapeByParentVar, skill),
         role: skill.role || null,    // semantic role (humanoid-part, ui-element, …)
         kind: skill.kind || null,    // head | torso | limb | part | ui | …
+        source: node.source || 'direct', // v65: Track factory expansion source
       };
 
       // Attach text overlay metadata if this TextLabel renders on a 3D object

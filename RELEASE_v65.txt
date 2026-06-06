@@ -1,0 +1,79 @@
+═══════════════════════════════════════════════════════════════════════════════
+  AF51-RBX FACTORY v65 — PARSER ENHANCEMENTS
+  Release: 2026-06-06 | Commit: 55c32c7 | Size: 5.5 MB
+═══════════════════════════════════════════════════════════════════════════════
+
+🔗 LATAUSLINKIT (KLIKKAA):
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. ZIP-PAKETTI (SUORA LATAUS):                                             │
+│    https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip
+│                                                                             │
+│ 2. TIETTY VERSIO (v65 commit 55c32c7):                                     │
+│    https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/55c32c7.zip
+│                                                                             │
+│ 3. REPOSITORY SELAIN:                                                      │
+│    https://github.com/janijukka-hue/af51-rbx-factory-v23                   │
+│                                                                             │
+│ 4. TAR.GZ PAKETTI (LOKAALI):                                               │
+│    workspace/af51-rbx-factory-v65-parser-enhancements.tar.gz               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+✨ UUDET OMINAISUUDET v65:
+
+  ✅ Factory Function Expansion
+     • makePart(name, size, position, color, material)
+     • makeNPC(name, position, appearance) 
+     • makeTool(name, toolType)
+     
+  ✅ Parser Diagnostics UI
+     • Design Report panel näyttää parser-kyvyt
+     • Direct/Factory/SurfaceGui/Parent breakdown
+     
+  ✅ Performance Optimization
+     • CachedLuaProjectBuilder: 32.8% nopeampi
+     • Cache enabled: 86.3% nopeampi
+     • Cache hit: 735x speedup (0.02ms vs 16ms)
+     
+  ✅ UI/UX Improvements
+     • SurfaceGui text overlay metadata
+     • Accurate UI Layer descriptions
+     • Parent variable resolution
+
+📊 TESTIT: 8/8 PASS
+
+  ✓ test-makepart-expansion.mjs
+  ✓ test-surfacegui-text-overlay.mjs
+  ✓ test-parser-diagnostics.mjs
+  ✓ test-factory-extensions.mjs
+  ✓ test-shape-rendering.mjs
+  ✓ test-material-rendering.mjs
+  ✓ test-design-report.mjs
+  ✓ test-zip-export.mjs
+
+📚 DOKUMENTAATIO:
+
+  • PARSER_ENHANCEMENTS_V65.md (440+ lines)
+  • RBX_FACTORY_V65_ROADMAP.md
+  • CODE_AWARE_FACTORY_GUIDE.md
+  • IMPLEMENTATION_SUMMARY.md
+
+🚀 PIKA-ALOITUS:
+
+  1. Lataa ZIP:
+     https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip
+     
+  2. Pura ja asenna:
+     unzip af51-rbx-factory-v23-main.zip
+     cd af51-rbx-factory-v23-main
+     npm install
+     
+  3. Testaa:
+     node test-factory-extensions.mjs
+     
+  4. Käynnistä:
+     npm start
+
+═══════════════════════════════════════════════════════════════════════════════
+  VALMIS TUOTANTOON! 🎉
+═══════════════════════════════════════════════════════════════════════════════

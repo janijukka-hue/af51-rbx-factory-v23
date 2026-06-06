@@ -99,6 +99,15 @@ export class PreviewRenderer {
     // Skill context over the parsed graph (read-only views of children/parents).
     const skillCtx = makeCtx(nodes);
 
+    // ── A) Find SurfaceGui/BillboardGui → parent mapping ────────────────
+    // These UI containers should render their text content on the 3D parent object.
+    const guiParentByVar = {}; // guiVar → 3D parent varName
+    for (const n of nodes) {
+      if ((n.className === 'SurfaceGui' || n.className === 'BillboardGui') && n.parentVar) {
+        guiParentByVar[n.varName] = n.parentVar;
+      }
+    }
+
     // ── B) Mesh-child shape inheritance ──────────────────────────────────
     // A Part with a SpecialMesh/CylinderMesh/BlockMesh/SphereMesh child should
     // render as that shape, not as a plain box. Build parentVar → shape from
@@ -122,6 +131,19 @@ export class PreviewRenderer {
       // RBX Skill interpretation (safe: {} if no skill matched).
       let skill = {};
       try { skill = interpretNode(node, skillCtx) || {}; } catch (e) { skill = {}; }
+
+      // ── KORJAUS 3: Text overlay for SurfaceGui/BillboardGui ────────────
+      // If this is a TextLabel/TextButton under a SurfaceGui/BillboardGui,
+      // extract its .Text to render on the 3D parent object.
+      let textOverlay = null;
+      let overlayTargetVar = null;
+      if ((node.className === 'TextLabel' || node.className === 'TextButton') && node.parentVar) {
+        const guiParent = guiParentByVar[node.parentVar];
+        if (guiParent) {
+          textOverlay = p.Text || '';
+          overlayTargetVar = guiParent;
+        }
+      }
 
       // UI classes use UDim2 (not Vector3) → never trust p.Size as 3D dims.
       // Give them a flat, fixed placeholder so they never produce NaN.
@@ -147,7 +169,7 @@ export class PreviewRenderer {
       const explicitColor = p.Color || p.BrickColor;
       const color = explicitColor || skill.roleColor || map.color;
 
-      return {
+      const struct = {
         id: node.id,
         type: map.type,
         label: String(p.Name || node.className || 'PART').toUpperCase(),
@@ -167,6 +189,14 @@ export class PreviewRenderer {
         role: skill.role || null,    // semantic role (humanoid-part, ui-element, …)
         kind: skill.kind || null,    // head | torso | limb | part | ui | …
       };
+
+      // Attach text overlay metadata if this TextLabel renders on a 3D object
+      if (textOverlay && overlayTargetVar) {
+        struct.textOverlay = textOverlay;
+        struct.textOverlayTarget = overlayTargetVar;
+      }
+
+      return struct;
     });
 
     return {

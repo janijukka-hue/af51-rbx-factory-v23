@@ -916,12 +916,13 @@ function MasterRoomUI(props) {
                     return null;
                   })()}
                 />
-                {(rbxDesignReport || rbxStudioReport || rbxDiagnostics) ? (
+                {(rbxDesignReport || rbxStudioReport || rbxDiagnostics || ws.rbxSkillsRing) ? (
                   <RbxDesignReportPanel
                     report={rbxDesignReport}
                     studio={rbxStudioReport}
                     shots={rbxShots}
                     diagnostics={rbxDiagnostics}
+                    skillsRing={ws.rbxSkillsRing}
                     style={{ marginTop: 12 }}
                   />
                 ) : null}

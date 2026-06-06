@@ -9,7 +9,7 @@
 //   latestBuild = {
 //     source, status, errors,
 //     previewData, structures,
-//     enriched, design, studio, shots,
+//     enriched, design, studio, shots, diagnostics, skillsRing,
 //     buildId, signature, artifactHash, zipName, downloadUrl, createdAt
 //   }
 
@@ -30,6 +30,8 @@ export function normalizeLuaBuild(source, resp) {
     design:   resp.design || null,
     studio:   resp.studio || null,
     shots:    resp.shots || null,
+    diagnostics: resp.diagnostics || null,
+    skillsRing:  resp.skillsRing || null,
 
     buildId:      resp.buildId || null,
     signature:    sig.fingerprint || (typeof resp.signature === "string" ? resp.signature : null),
@@ -49,6 +51,7 @@ export function failedBuild(source, errorMessage) {
   return {
     source: source || "", status: "failed", errors: [errorMessage || "Build failed"],
     previewData: null, structures: [], enriched: null, design: null, studio: null, shots: null,
+    diagnostics: null, skillsRing: null,
     buildId: null, signature: null, artifactHash: null, instanceCount: null, fileCount: null,
     zipName: null, downloadUrl: null, createdAt: Date.now(), origin: "lua-build",
   };

@@ -171,6 +171,8 @@ function RbxProductionCockpit(props) {
                 report={data.design}
                 studio={data.studio}
                 shots={data.shots}
+                diagnostics={data.diagnostics}
+                skillsRing={data.skillsRing}
               />
             ) : (
               <Text style={styles.empty}>Director reports appear after analysis.</Text>

@@ -107,12 +107,6 @@ export class LuaProjectBuilder {
     const preview = new PreviewRenderer().render(graph);
     const passCtx = runLuaPasses(graph);  // read-only analysis: quality + groups + features
 
-    // Dual Preview Intelligence (read-only): technical enrichment + creative
-    // report, both derived strictly from the parsed graph. Wrapped so a director
-    // error can never fail a build that otherwise succeeded.
-    let intelligence = null;
-    try { intelligence = analyzeScene(graph); } catch (e) { intelligence = null; }
-
     // 2) Route the script to a service
     const route = routeScript(source);
     const scriptName = scriptBase + route.ext;
@@ -204,6 +198,17 @@ export class LuaProjectBuilder {
       fileCount: allFiles.length,
     };
     fs.writeFileSync(path.join(tmpRoot, 'signature.json'), JSON.stringify(signature, null, 2), 'utf8');
+
+    // KORJAUS 5: Run intelligence AFTER fileCount is known
+    // Dual Preview Intelligence (read-only): technical enrichment + creative
+    // report, both derived strictly from the parsed graph. Wrapped so a director
+    // error can never fail a build that otherwise succeeded.
+    let intelligence = null;
+    try {
+      intelligence = analyzeScene(graph, { fileCount: allFiles.length, instanceCount: graph.nodes.length });
+    } catch (e) {
+      intelligence = null;
+    }
 
     // 9) ZIP it (Studio-ready)
     const exportsDir = opts.exportsDir || path.join(process.cwd(), 'exports-rbx');

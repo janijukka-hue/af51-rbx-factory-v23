@@ -15,11 +15,16 @@ import { RbxCreativeDirector } from "./RbxCreativeDirector.js";
 import { RbxStudioDirector } from "./RbxStudioDirector.js";
 import { RbxCinematicDirector } from "./RbxCinematicDirector.js";
 
-export function analyzeScene(graph) {
+/**
+ * Analyze a scene graph with full Director intelligence.
+ * @param {object} graph - Scene graph { nodes: [...] }
+ * @param {object} buildMeta - Build metadata { fileCount?, instanceCount? }
+ */
+export function analyzeScene(graph, buildMeta = {}) {
   const interpreted = interpretGraph(graph);
   const enriched = new RbxPreviewDirector().enrich(graph, interpreted);
   const report = new RbxCreativeDirector().assess(graph, interpreted);
-  const studio = new RbxStudioDirector().assess(enriched, graph);
+  const studio = new RbxStudioDirector().assess(enriched, graph, buildMeta);
   const shots = new RbxCinematicDirector().plan(enriched, report, graph);
   return { interpreted, enriched, report, studio, shots };
 }

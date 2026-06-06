@@ -13,7 +13,13 @@
 import { finding } from "./_directorBase.js";
 
 export class RbxStudioDirector {
-  assess(enriched, graph) {
+  /**
+   * Assess production readiness of an RBX scene.
+   * @param {object} enriched - Preview Director output (performance, etc.)
+   * @param {object} graph - Scene graph with nodes
+   * @param {object} buildMeta - Build metadata { fileCount?, instanceCount? }
+   */
+  assess(enriched, graph, buildMeta = {}) {
     enriched = enriched || {};
     const nodes = (graph && graph.nodes) || [];
     const perf = enriched.performance || {};
@@ -43,9 +49,16 @@ export class RbxStudioDirector {
     }
 
     // ── Scripts present? (a world with no logic is static) ───────────────
-    const scriptCount = nodes.filter((n) =>
+    // KORJAUS 5: Count Script instances in AST (gameplay scripts), not source files.
+    // User's main .lua file is packaged but isn't a Script instance.
+    // fileCount = total files (source + default.project.json + signature.json)
+    // gameplayScriptCount = Script/LocalScript/ModuleScript instances in code
+    const gameplayScriptCount = nodes.filter((n) =>
       ["Script", "LocalScript", "ModuleScript"].includes(n.className)).length;
-    if (scriptCount === 0 && nodes.length > 0) {
+    const sourceFileCount = buildMeta.fileCount || 0;
+    const hasSourceFile = sourceFileCount > 2; // > 2 means user code exists (not just .project + signature)
+
+    if (gameplayScriptCount === 0 && !hasSourceFile && nodes.length > 0) {
       warnings.push("No scripts — the place is static (no gameplay logic).");
     }
 
@@ -68,13 +81,22 @@ export class RbxStudioDirector {
     else if (warnings.length > 1){ level = "needs-review"; conf = 0.6; }
     else                         { level = "publish-ready"; conf = 0.7; }
 
+    // KORJAUS 5: Report source files + gameplay scripts separately
+    const scriptSummary = hasSourceFile
+      ? (gameplayScriptCount > 0
+          ? sourceFileCount + " files · " + gameplayScriptCount + " gameplay scripts"
+          : sourceFileCount + " files")
+      : (gameplayScriptCount > 0
+          ? gameplayScriptCount + " gameplay scripts"
+          : "0 scripts");
+
     return {
       kind: "STUDIO_REPORT",
       schemaVersion: "1.0.0",
       readiness: finding(level, conf, [
         (hasSpawn ? "has spawn" : "no spawn"),
         "mobile: " + mobile,
-        scriptCount + " scripts",
+        scriptSummary,
         nodes.length + " instances",
       ]),
       mobile,

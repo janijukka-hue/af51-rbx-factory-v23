@@ -1,6 +1,23 @@
-# 🚀 RBX Factory v65 — Roadmap
+# 🚀 RBX Factory v65/v66 — Roadmap
 
-**Production-Grade Intent Routing & Content Validation**
+**v65 COMPLETE ✅ — Parser Enhancements**
+**v66 NEXT — Production-Grade Intent Routing & Content Validation**
+
+---
+
+## ✅ **v65 ACHIEVEMENTS (COMPLETE):**
+
+### **Parser & Preview Enhancements:**
+✅ Factory Function Expansion (`makePart(...)`)
+✅ Parent Variable Resolution (`gui.Parent = sign` → `"BIG_SIGN"`)
+✅ SurfaceGui Text Overlay (metadata for 3D rendering)
+✅ UI Layer Accurate Descriptions (SurfaceGui/BillboardGui/ScreenGui)
+✅ Design Report Script Counter (source files vs gameplay scripts)
+✅ Parser Diagnostics (direct/factory/surfaceGui/parentResolved)
+
+**Test Coverage:** 8/8 automated tests passing
+**Documentation:** `PARSER_ENHANCEMENTS_V65.md` (440+ lines)
+**Backward Compatibility:** 100%
 
 ---
 
@@ -31,7 +48,9 @@ NOW (v64): Source-Driven Factory
 
 ---
 
-## 🎯 **v65 PRIORITIES:**
+## 🎯 **v66 PRIORITIES:**
+
+**v65 was parser/preview enhancements. v66 is production routing.**
 
 ### **1. Intent Router** (HIGH PRIORITY)
 
@@ -189,7 +208,7 @@ if (detection.isLua) {
 
 ---
 
-## 🧪 **v65 ACCEPTANCE TESTS:**
+## 🧪 **v66 ACCEPTANCE TESTS:**
 
 ### **Test 1: Intent Routing**
 
@@ -228,7 +247,7 @@ Expected:
 
 ---
 
-## 📊 **v65 SUCCESS CRITERIA:**
+## 📊 **v66 SUCCESS CRITERIA:**
 
 ✅ **Intent Router** distinguishes:
 - Template requests ("Create RPG") → Full template
@@ -258,9 +277,9 @@ ARTIFACT (ZIP)
 
 ---
 
-## 🏭 **v65 = Production-Ready Factory**
+## 🏭 **v66 = Production-Ready Factory**
 
-When v65 is complete, RBX Factory will:
+When v66 is complete, RBX Factory will:
 
 ✅ Reject garbage input  
 ✅ Reject non-buildable Lua  
@@ -269,8 +288,24 @@ When v65 is complete, RBX Factory will:
 ✅ Build template products  
 ✅ Never produce artifacts from invalid input  
 
-**v65 achieves the original AF51 vision:**
+**v66 will achieve the original AF51 vision:**
 
 > "Tehdas lukee käyttäjän koodin ja build valmistaa. Eihän se muuten mikää tehdas ole."
+
+---
+
+## 🎯 **CURRENT STATUS (2026-06-06):**
+
+**v65 ✅ COMPLETE**
+- Parser & Preview enhancements shipped
+- 8/8 tests passing
+- Full documentation published
+
+**v66 🚧 PLANNED**
+- Intent Router (not started)
+- Content Validator (not started)
+- Production routing logic (not started)
+
+**Next Step:** Begin v66 Intent Router implementation
 
 🚀🏭✨

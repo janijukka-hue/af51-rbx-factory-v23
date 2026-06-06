@@ -93,7 +93,9 @@ export class InstanceGraphBuilder {
           if (SERVICES.includes(p)) {
             obj.parent = p === 'Workspace' ? 'workspace' : p;
           } else if (byVar[p]) {
-            obj.parent = byVar[p].className + '(' + p + ')';
+            // v64 KORJAUS 2: Resolve parent to actual object Name if available
+            const parentName = byVar[p].properties.Name || p;
+            obj.parent = parentName;
             obj.parentVar = p;
           } else {
             obj.parent = p; // unresolved var → could be a service alias declared via GetService

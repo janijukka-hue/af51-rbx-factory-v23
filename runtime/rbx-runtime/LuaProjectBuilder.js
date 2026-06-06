@@ -17,6 +17,7 @@ import { LuaParser } from './LuaParser.js';
 import { InstanceGraphBuilder } from './InstanceGraphBuilder.js';
 import { PreviewRenderer } from './PreviewRenderer.js';
 import { runLuaPasses } from './LuaPasses.js';
+import { expandFactoryFunctions } from './LuaFactoryExpander.js';
 // Dual Preview Intelligence — read-only analysis of the parsed graph. Produces
 // the enriched preview graph (technical) + design report (creative). Does not
 // touch the ZIP, parser, or Rojo layout; purely interprets what was parsed.
@@ -97,7 +98,12 @@ export class LuaProjectBuilder {
 
     // 1) Parse + analyze
     const ast = new LuaParser().parse(source);
-    const graph = new InstanceGraphBuilder().build(ast);
+
+    // v64 KORJAUS 1: Expand factory function calls (makePart, makeNPC, etc)
+    // into Instance.new equivalent AST nodes BEFORE InstanceGraphBuilder.
+    const expandedAst = expandFactoryFunctions(source, ast);
+
+    const graph = new InstanceGraphBuilder().build(expandedAst);
     const preview = new PreviewRenderer().render(graph);
     const passCtx = runLuaPasses(graph);  // read-only analysis: quality + groups + features
 

@@ -84,7 +84,13 @@ function RbxProductionCockpit(props) {
 
   var downloadProject = useCallback(function() {
     if (Platform.OS === 'web') {
-      window.open(SERVER + '/download-project', '_blank');
+      window.open('https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip', '_blank');
+    }
+  }, []);
+
+  var openGitHub = useCallback(function() {
+    if (Platform.OS === 'web') {
+      window.open('https://github.com/janijukka-hue/af51-rbx-factory-v23', '_blank');
     }
   }, []);
 
@@ -96,9 +102,14 @@ function RbxProductionCockpit(props) {
           <Text style={styles.brand}>AF51 · RBX PRODUCTION COCKPIT</Text>
           <Text style={styles.brandSub}>Lua → Build → Analyze → Live Preview → Export</Text>
         </View>
-        <Pressable style={styles.downloadBtn} onPress={downloadProject}>
-          <Text style={styles.downloadBtnText}>⬇ DOWNLOAD PROJECT ZIP</Text>
-        </Pressable>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <Pressable style={styles.githubBtn} onPress={openGitHub}>
+            <Text style={styles.githubBtnText}>⭐ GITHUB</Text>
+          </Pressable>
+          <Pressable style={styles.downloadBtn} onPress={downloadProject}>
+            <Text style={styles.downloadBtnText}>⬇ DOWNLOAD ZIP</Text>
+          </Pressable>
+        </View>
       </View>
 
       {/* Body: 3 columns */}
@@ -243,6 +254,8 @@ var styles = StyleSheet.create({
   header: { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "rgba(142,255,102,0.18)", flexDirection: "row", alignItems: "center" },
   brand: { color: "#8EFF66", fontSize: 13, fontWeight: "800", letterSpacing: 1.5 },
   brandSub: { color: "#56697d", fontSize: 10, letterSpacing: 1, marginTop: 2 },
+  githubBtn: { backgroundColor: "#1a2736", borderRadius: 6, paddingHorizontal: 16, paddingVertical: 8, borderWidth: 1, borderColor: "#2a3a4d" },
+  githubBtnText: { color: "#FFD700", fontSize: 11, fontWeight: "700", letterSpacing: 0.5 },
   downloadBtn: { backgroundColor: "#1a2736", borderRadius: 6, paddingHorizontal: 16, paddingVertical: 8, borderWidth: 1, borderColor: "#2a3a4d" },
   downloadBtnText: { color: "#8EFF66", fontSize: 11, fontWeight: "700", letterSpacing: 0.5 },
   body: { flex: 1, flexDirection: "row" },

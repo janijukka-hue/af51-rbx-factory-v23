@@ -2,6 +2,10 @@
 
 **Enterprise Roblox Code Factory with 150-Skill Capability Operating System**
 
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/janijukka-hue/af51-rbx-factory-v23)
+[![Download](https://img.shields.io/badge/Download-Complete_Project-green?logo=download)](https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip)
+[![License](https://img.shields.io/badge/License-Proprietary-red)]()
+
 ---
 
 ## 🎯 What is this?
@@ -18,9 +22,20 @@ AF51-RBX Factory is a production-grade Roblox development factory that transform
 
 ## 📦 Download Complete Project
 
-**[⬇ DOWNLOAD PROJECT ZIP](http://localhost:3000/download-project)**
+### **Option 1: GitHub (Recommended)**
+**[⬇ DOWNLOAD FROM GITHUB](https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip)**
 
-Or access via API:
+```bash
+# Via curl
+curl -L https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip -o af51-rbx-factory.zip
+
+# Via git clone
+git clone https://github.com/janijukka-hue/af51-rbx-factory-v23.git
+```
+
+### **Option 2: Local Server API** (when server is running)
+**[⬇ DOWNLOAD VIA SERVER](http://localhost:3000/download-project)**
+
 ```bash
 curl http://localhost:3000/download-project -o af51-rbx-factory-complete.zip
 ```

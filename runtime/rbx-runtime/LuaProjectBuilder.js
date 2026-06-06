@@ -107,6 +107,22 @@ export class LuaProjectBuilder {
     const preview = new PreviewRenderer().render(graph);
     const passCtx = runLuaPasses(graph);  // read-only analysis: quality + groups + features
 
+    // KORJAUS 6: Parser diagnostics (count from AST nodes, not graph nodes)
+    const allInstanceCreations = expandedAst.nodes.filter(n => n.type === 'InstanceCreation');
+    const directInstances = allInstanceCreations.filter(n => !n.source || n.source === 'direct').length;
+    const factoryInstances = allInstanceCreations.filter(n => n.source && n.source.startsWith('expanded_')).length;
+    const surfaceGuiCount = graph.nodes.filter(n =>
+      n.className === 'SurfaceGui' || n.className === 'BillboardGui'
+    ).length;
+    const parentResolved = graph.nodes.filter(n => n.parentVar != null).length;
+
+    const diagnostics = {
+      direct: directInstances,
+      factory: factoryInstances,
+      surfaceGui: surfaceGuiCount,
+      parentResolved,
+    };
+
     // 2) Route the script to a service
     const route = routeScript(source);
     const scriptName = scriptBase + route.ext;
@@ -255,6 +271,7 @@ export class LuaProjectBuilder {
       previewType: 'static-structure-preview',
       runtimeEvents,
       runtimeVerification: 'Requires Roblox Studio Play',
+      diagnostics,  // KORJAUS 6: Parser capability status
       quality: passCtx.report,  // measured from user's Lua — informational, non-blocking
       enriched: intelligence ? intelligence.enriched : null,  // Preview Director (technical)
       design:   intelligence ? intelligence.report : null,    // Creative Director (creative)

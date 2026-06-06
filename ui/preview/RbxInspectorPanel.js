@@ -31,9 +31,20 @@ export function RbxInspectorPanel(props) {
 
   var group = classifyStructure(s);
   var isUI = group === "ui";
-  var runtimeNote = isUI
-    ? "Renders in PlayerGui during Roblox Studio Play"
-    : "Static structure — runtime behavior runs in Roblox Studio";
+
+  // KORJAUS 4: Accurate runtime note based on UI class
+  var runtimeNote;
+  if (s.luaClass === "SurfaceGui") {
+    runtimeNote = "Renders on parent Part surface in Roblox Studio";
+  } else if (s.luaClass === "BillboardGui") {
+    runtimeNote = "Renders above parent object in Roblox Studio";
+  } else if (s.luaClass === "ScreenGui") {
+    runtimeNote = "Renders in PlayerGui during Roblox Studio Play";
+  } else if (isUI) {
+    runtimeNote = "UI element — parent determines rendering location";
+  } else {
+    runtimeNote = "Static structure — runtime behavior runs in Roblox Studio";
+  }
 
   return (
     <View style={styles.panel}>

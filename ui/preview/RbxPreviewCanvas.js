@@ -16,6 +16,25 @@ import { normalizeStructures, structuresFromPreviewData, terrainFromPreviewData 
 var UI_CLASSES = ["ScreenGui","Frame","TextLabel","TextButton","TextBox","ImageLabel","ImageButton","ScrollingFrame","SurfaceGui","BillboardGui","UIListLayout","UIGridLayout","UICorner"];
 function isUiStructure(s) { return s.type === "ui" || UI_CLASSES.indexOf(s.luaClass) !== -1; }
 
+// KORJAUS 4: Accurate UI rendering descriptions based on class
+function getUIRenderingNote(uiItems) {
+  var hasSurfaceGui = uiItems.some(function(u) { return u.luaClass === "SurfaceGui"; });
+  var hasBillboardGui = uiItems.some(function(u) { return u.luaClass === "BillboardGui"; });
+  var hasScreenGui = uiItems.some(function(u) { return u.luaClass === "ScreenGui"; });
+
+  if (hasSurfaceGui && !hasBillboardGui && !hasScreenGui) {
+    return "renders on parent surface";
+  }
+  if (hasBillboardGui && !hasSurfaceGui && !hasScreenGui) {
+    return "renders above parent object";
+  }
+  if (hasScreenGui && !hasSurfaceGui && !hasBillboardGui) {
+    return "renders in PlayerGui at runtime";
+  }
+  // Mixed types - show generic message
+  return "UI elements (see hierarchy for details)";
+}
+
 function getBounds(structures) {
   var v = structures.filter(function(s){ return !isUiStructure(s); });
   if (v.length === 0) return { minX:-10,maxX:10,minY:0,maxY:20,minZ:-10,maxZ:10 };
@@ -327,7 +346,7 @@ export function RbxPreviewCanvas(props) {
               </View>
             );
           })}
-          <Text style={styles.uiNote}>renders in PlayerGui at runtime</Text>
+          <Text style={styles.uiNote}>{getUIRenderingNote(uiItems)}</Text>
         </View>
       ) : null}
     </View>

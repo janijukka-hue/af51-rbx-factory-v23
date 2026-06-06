@@ -7,18 +7,16 @@
 ## 📥 **LATAUSLINKIT:**
 
 ### **1. GitHub Repository:**
-```
-https://github.com/janijukka-hue/af51-rbx-factory-v23
-```
 
-**Suora lataus (ZIP):**
-```
-https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip
-```
+**Repository:** [https://github.com/janijukka-hue/af51-rbx-factory-v23](https://github.com/janijukka-hue/af51-rbx-factory-v23)
+
+**Suora ZIP-lataus:** [https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip](https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip)
 
 ---
 
 ### **2. Täydellinen Paketti (tar.gz):**
+
+**VFS-lataus (3.8 MB):** [af51-rbx-factory-v64-source-driven.tar.gz](https://app.augmentcode.com/app/vfs/user/af51-rbx-factory-v64-source-driven.tar.gz?view=focus)
 
 **Tiedosto:** `af51-rbx-factory-v64-source-driven.tar.gz` (3.8 MB)
 
@@ -43,9 +41,10 @@ npm install
 npm test
 ```
 
-### **Vaihtoehto 2: ZIP-lataus**
+### **Vaihtoehto 2: ZIP-lataus (GitHub)**
 ```bash
-# Lataa ja pura
+# Lataa ZIP: https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip
+# Pura selaimen latauskansiosta tai:
 wget https://github.com/janijukka-hue/af51-rbx-factory-v23/archive/refs/heads/main.zip
 unzip main.zip
 cd af51-rbx-factory-v23-main
@@ -55,11 +54,12 @@ npm install
 npm test
 ```
 
-### **Vaihtoehto 3: tar.gz-paketti**
+### **Vaihtoehto 3: tar.gz-paketti (VFS)**
 ```bash
-# Pura paketti
+# Lataa VFS: https://app.augmentcode.com/app/vfs/user/af51-rbx-factory-v64-source-driven.tar.gz?view=focus
+# Pura ladattu tiedosto:
 tar -xzf af51-rbx-factory-v64-source-driven.tar.gz
-cd af51-rbx-factory-v64-source-driven
+cd workspace  # tai mikä kansio tuli
 
 # Asenna ja testaa
 npm install

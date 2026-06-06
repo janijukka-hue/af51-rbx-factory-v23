@@ -82,12 +82,23 @@ function RbxProductionCockpit(props) {
   var selected = null;
   for (var i = 0; i < structures.length; i++) if (structures[i].__id === selectedId) selected = structures[i];
 
+  var downloadProject = useCallback(function() {
+    if (Platform.OS === 'web') {
+      window.open(SERVER + '/download-project', '_blank');
+    }
+  }, []);
+
   return (
     <View style={styles.root}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.brand}>AF51 · RBX PRODUCTION COCKPIT</Text>
-        <Text style={styles.brandSub}>Lua → Build → Analyze → Live Preview → Export</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.brand}>AF51 · RBX PRODUCTION COCKPIT</Text>
+          <Text style={styles.brandSub}>Lua → Build → Analyze → Live Preview → Export</Text>
+        </View>
+        <Pressable style={styles.downloadBtn} onPress={downloadProject}>
+          <Text style={styles.downloadBtnText}>⬇ DOWNLOAD PROJECT ZIP</Text>
+        </Pressable>
       </View>
 
       {/* Body: 3 columns */}
@@ -229,9 +240,11 @@ function RbxProductionCockpit(props) {
 
 var styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: "#05080a" },
-  header: { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "rgba(142,255,102,0.18)" },
+  header: { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "rgba(142,255,102,0.18)", flexDirection: "row", alignItems: "center" },
   brand: { color: "#8EFF66", fontSize: 13, fontWeight: "800", letterSpacing: 1.5 },
   brandSub: { color: "#56697d", fontSize: 10, letterSpacing: 1, marginTop: 2 },
+  downloadBtn: { backgroundColor: "#1a2736", borderRadius: 6, paddingHorizontal: 16, paddingVertical: 8, borderWidth: 1, borderColor: "#2a3a4d" },
+  downloadBtnText: { color: "#8EFF66", fontSize: 11, fontWeight: "700", letterSpacing: 0.5 },
   body: { flex: 1, flexDirection: "row" },
   left: { width: 240, borderRightWidth: 1, borderRightColor: "#16202b", padding: 10 },
   center: { flex: 1, padding: 10 },

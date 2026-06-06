@@ -1508,6 +1508,45 @@ var server = http.createServer(async function(req, res) {
     if (method === "GET"  && url.startsWith("/published/") && url.endsWith("/download"))
       return handlePublishedDownload(req, res, url);
 
+    // GET /download-project — Download entire AF51 project as ZIP
+    if (method === "GET" && url === "/download-project") {
+      try {
+        var archiver = await import("archiver");
+        var arch = archiver.default("zip", { zlib: { level: 9 } });
+
+        res.writeHead(200, {
+          "Content-Type": "application/zip",
+          "Content-Disposition": "attachment; filename=af51-rbx-factory-v23-complete.zip",
+          "Access-Control-Allow-Origin": process.env.ALX_CORS_ORIGIN || "*",
+        });
+
+        arch.pipe(res);
+
+        // Add all project files except node_modules, .git, exports, vault
+        arch.glob("**/*", {
+          cwd: process.cwd(),
+          ignore: [
+            "node_modules/**",
+            ".git/**",
+            "exports-rbx/**",
+            "vault/**",
+            ".expo/**",
+            ".augment/**",
+            "*.log",
+            ".DS_Store"
+          ],
+          dot: true
+        });
+
+        arch.finalize();
+        console.log("[download-project] Project ZIP requested");
+        return;
+      } catch (e) {
+        console.error("[download-project] Error:", e);
+        return send(res, 500, { error: "Failed to create project ZIP: " + e.message });
+      }
+    }
+
     send(res, 404, { error: "Reitti ei löydy: " + method + " " + url });
 
   } catch (err) {

@@ -13,6 +13,7 @@ import React, { useMemo, useEffect } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { normalizeStructures, structuresFromPreviewData, terrainFromPreviewData } from "./rbxPreviewUtils.js";
 import { RbxPreviewDirector } from "../../s4/oliot/rbx-directors/RbxPreviewDirector.js";
+import { quickAnalyze } from "../../k1/SkillsRingBootstrap.mjs";
 
 var UI_CLASSES = ["ScreenGui","Frame","TextLabel","TextButton","TextBox","ImageLabel","ImageButton","ScrollingFrame","SurfaceGui","BillboardGui","UIListLayout","UIGridLayout","UICorner"];
 function isUiStructure(s) { return s.type === "ui" || UI_CLASSES.indexOf(s.luaClass) !== -1; }

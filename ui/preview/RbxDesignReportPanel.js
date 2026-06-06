@@ -40,7 +40,9 @@ function RbxDesignReportPanel(props) {
   var studio = props.studio;
   var shots = props.shots;
   var diagnostics = props.diagnostics;
-  if (!report && !studio && !diagnostics) {
+  var skillsRing = props.skillsRing; // NEW: Skills Ring results
+
+  if (!report && !studio && !diagnostics && !skillsRing) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Design Report</Text>
@@ -115,6 +117,52 @@ function RbxDesignReportPanel(props) {
           })}
         </View>
       ) : null}
+
+      {/* Skills Ring Analysis */}
+      {skillsRing && skillsRing.results && (
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>⚡ SKILLS RING ({skillsRing.pipeline.length} skills)</Text>
+
+          {skillsRing.results['semantic-analysis'] && (
+            <View style={styles.diagRow}>
+              <Text style={styles.diagLabel}>Intent</Text>
+              <Text style={styles.diagValue}></Text>
+              <Text style={styles.diagDesc}>{skillsRing.results['semantic-analysis'].intent || 'unknown'}</Text>
+            </View>
+          )}
+
+          {skillsRing.results['quality-gate'] && (
+            <View>
+              <View style={styles.diagRow}>
+                <Text style={styles.diagLabel}>Quality Score</Text>
+                <Text style={styles.diagValue}>{skillsRing.results['quality-gate'].scores.overall}</Text>
+                <Text style={styles.diagDesc}>{skillsRing.results['quality-gate'].verdict}</Text>
+              </View>
+              <View style={styles.diagRow}>
+                <Text style={styles.diagLabel}>Tier</Text>
+                <Text style={styles.diagValue}>{skillsRing.results['quality-gate'].tier}</Text>
+                <Text style={styles.diagDesc}>{skillsRing.results['quality-gate'].ready ? 'production-ready' : 'needs-work'}</Text>
+              </View>
+            </View>
+          )}
+
+          {skillsRing.results['performance-analysis'] && (
+            <View style={styles.diagRow}>
+              <Text style={styles.diagLabel}>Mobile Ready</Text>
+              <Text style={styles.diagValue}>{skillsRing.results['performance-analysis'].mobileReadiness.score}</Text>
+              <Text style={styles.diagDesc}>{skillsRing.results['performance-analysis'].mobileReadiness.level}</Text>
+            </View>
+          )}
+
+          {skillsRing.results['geometry-analysis'] && (
+            <View style={styles.diagRow}>
+              <Text style={styles.diagLabel}>Complexity</Text>
+              <Text style={styles.diagValue}>{skillsRing.results['geometry-analysis'].complexity.score}</Text>
+              <Text style={styles.diagDesc}>{skillsRing.results['geometry-analysis'].complexity.level}</Text>
+            </View>
+          )}
+        </View>
+      )}
     </View>
   );
 }

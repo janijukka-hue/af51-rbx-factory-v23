@@ -113,7 +113,7 @@ async function test() {
     const tests = [
       { name: 'Skills Ring initialized', pass: ring != null },
       { name: 'Governor created', pass: governor != null },
-      { name: '54 skills registered', pass: stats.totalSkills === 54 },
+      { name: '150 skills registered', pass: stats.totalSkills === 150 },
       { name: '12 domains active', pass: stats.domains.filter(d => d.skillCount > 0).length === 12 },
       { name: 'Skills executed', pass: finalStats.totalExecutions > 0 },
       { name: 'Semantic analysis available', pass: ring.findByCapability('semantic-analysis').length > 0 },
@@ -145,8 +145,8 @@ async function test() {
     console.log('✅ All tests passed!\n');
     console.log('🎯 Skills Ring Architecture:');
     console.log('   - Enterprise capability OS ✅');
-    console.log('   - 12 domains (4 active) ✅');
-    console.log('   - 6/150 skills registered ✅');
+    console.log('   - 12 domains (ALL active) ✅');
+    console.log('   - 150/150 skills registered ✅ COMPLETE!');
     console.log('   - Governor orchestration ✅');
     console.log('   - Dependency resolution ✅');
     console.log('   - Energy tracking ✅');

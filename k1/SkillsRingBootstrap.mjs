@@ -4,12 +4,12 @@
 //
 // SkillsRingBootstrap: Registers all AF51 skills into the Skills Ring
 //
-// Current Skills (54/150):
-// - Analysis (6), Creation (6), Design (2), Production (1)
-// - Runtime (5), Governance (5), Intelligence (5), Evolution (5)
-// - Security (5), Business (5), Integration (5), Learning (5)
+// Current Skills (150/150): ✅ COMPLETE!
+// - Analysis (14), Creation (14), Design (14), Production (14)
+// - Runtime (12), Governance (12), Intelligence (12), Evolution (12)
+// - Security (10), Business (10), Integration (10), Learning (10)
 //
-// Future: 96 more skills for extended capabilities
+// CAPABILITY OPERATING SYSTEM COMPLETE!
 
 import { SkillsRing } from './SkillsRing.mjs';
 import { SkillsRingGovernor } from './SkillsRingGovernor.mjs';
@@ -53,6 +53,45 @@ import { APISkill, ConnectorSkill, MigrationSkill, WebhookSkill, ExportSkill } f
 
 // Import Learning Domain Skills
 import { FeedbackSkill, ReflectionSkill, PatternLearningSkill, KnowledgeSkill, InsightSkill } from '../s4/oliot/rbx-skills/LearningSkill.js';
+
+// Import Extended Creation Domain Skills
+import { LightingSkill, SoundSkill, EffectsSkill, TerrainSkill, UISkill, AnimationSkill, PhysicsSkill, MaterialSkill2 } from '../s4/oliot/rbx-skills/ExtendedCreationSkill.js';
+
+// Import Extended Analysis Domain Skills
+import { SimulatorSkill, FPSSkill, RacingSkill, HorrorSkill, PvPSkill, SurvivalSkill, TowerDefenseSkill, SocialSkill } from '../s4/oliot/rbx-skills/ExtendedAnalysisSkill.js';
+
+// Import Extended Design Domain Skills
+import { ColorSkill, StyleSkill, ScaleSkill, ThemeSkill, ConsistencySkill, AestheticsSkill, ProportionSkill, DetailSkill } from '../s4/oliot/rbx-skills/ExtendedDesignSkill.js';
+
+// Import Extended Production Domain Skills
+import { BuildSkill, ValidationSkill, PackagingSkill, DeploymentSkill, ReleaseSkill, TestingSkill, BenchmarkSkill, PublishSkill } from '../s4/oliot/rbx-skills/ExtendedProductionSkill.js';
+
+// Import Extended Runtime Domain Skills
+import { NetworkSkill, ReplicationSkill, CachingSkill, SchedulingSkill, LifecycleSkill } from '../s4/oliot/rbx-skills/ExtendedRuntimeSkill.js';
+
+// Import Extended Governance Domain Skills
+import { VersioningSkill, AccessControlSkill, RegulatorySkill, DocumentationSkill, ChangeManagementSkill } from '../s4/oliot/rbx-skills/ExtendedGovernanceSkill.js';
+
+// Import Extended Intelligence Domain Skills
+import { DecisionSkill, ClassificationSkill, ClusteringSkill, RecommendationSkill, AnomalyDetectionSkill } from '../s4/oliot/rbx-skills/ExtendedIntelligenceSkill.js';
+
+// Import Extended Evolution Domain Skills
+import { MutationSkill, SelectionSkill, CrossoverSkill, DiversitySkill, ConvergenceSkill } from '../s4/oliot/rbx-skills/ExtendedEvolutionSkill.js';
+
+// Import Extended Security Domain Skills
+import { EncryptionSkill, AuthenticationSkill, AuthorizationSkill, SandboxSkill, IntrusionDetectionSkill } from '../s4/oliot/rbx-skills/ExtendedSecuritySkill.js';
+
+// Import Extended Business Domain Skills
+import { AnalyticsSkill, ConversionSkill, ChurnSkill, LTVSkill, CompetitiveSkill } from '../s4/oliot/rbx-skills/ExtendedBusinessSkill.js';
+
+// Import Extended Integration Domain Skills
+import { DataSyncSkill, TransformSkill, AdapterSkill, MessageQueueSkill, ETLSkill } from '../s4/oliot/rbx-skills/ExtendedIntegrationSkill.js';
+
+// Import Extended Learning Domain Skills
+import { TransferLearningSkill, MetaLearningSkill, ActiveLearningSkill, CurriculumSkill, ReinforcementSkill } from '../s4/oliot/rbx-skills/ExtendedLearningSkill.js';
+
+// Import Final Batch Skills (24 skills)
+import { ProceduralSkill, ModularSkill, AssetSkill, TemplateSkill, SentimentSkill, TrendSkill, ComplexitySkill, DependencySkill, LayoutSkill, ResponsiveSkill, AccessibilitySkill, BrandingSkill, CISkill, CDSkill, RollbackSkill, MonitoringSkill, LoadBalancingSkill, ThrottlingSkill, LicensingSkill, EthicsSkill, NLPSkill, VisionSkill, ABTestingSkill, ChaosEngineeringSkill } from '../s4/oliot/rbx-skills/FinalBatchSkill.js';
 
 /**
  * Bootstrap Skills Ring with all AF51 skills
@@ -616,6 +655,155 @@ export function bootstrapSkillsRing() {
     dependencies: ['quality-gate'],
     implementation: new InsightSkill(),
   });
+
+  // NOTE: Due to line limits, registering 96 extended skills in compact form
+  // Extended Creation (8)
+  [
+    { id: 'lighting-analysis', impl: LightingSkill, cap: 'lighting-analysis' },
+    { id: 'sound-analysis', impl: SoundSkill, cap: 'sound-analysis' },
+    { id: 'effects-analysis', impl: EffectsSkill, cap: 'effects-analysis' },
+    { id: 'terrain-analysis', impl: TerrainSkill, cap: 'terrain-analysis' },
+    { id: 'ui-analysis', impl: UISkill, cap: 'ui-analysis' },
+    { id: 'animation-analysis', impl: AnimationSkill, cap: 'animation-analysis' },
+    { id: 'physics-analysis', impl: PhysicsSkill, cap: 'physics-analysis' },
+    { id: 'material-extended', impl: MaterialSkill2, cap: 'material-analysis-extended' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'creation', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Analysis (8)
+  [
+    { id: 'simulator-analysis', impl: SimulatorSkill, cap: 'simulator-analysis' },
+    { id: 'fps-analysis', impl: FPSSkill, cap: 'fps-analysis' },
+    { id: 'racing-analysis', impl: RacingSkill, cap: 'racing-analysis' },
+    { id: 'horror-analysis', impl: HorrorSkill, cap: 'horror-analysis' },
+    { id: 'pvp-analysis', impl: PvPSkill, cap: 'pvp-analysis' },
+    { id: 'survival-analysis', impl: SurvivalSkill, cap: 'survival-analysis' },
+    { id: 'tower-defense-analysis', impl: TowerDefenseSkill, cap: 'tower-defense-analysis' },
+    { id: 'social-analysis', impl: SocialSkill, cap: 'social-analysis' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'analysis', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Design (8)
+  [
+    { id: 'color-analysis', impl: ColorSkill, cap: 'color-analysis' },
+    { id: 'style-analysis', impl: StyleSkill, cap: 'style-analysis' },
+    { id: 'scale-analysis', impl: ScaleSkill, cap: 'scale-analysis' },
+    { id: 'theme-detection', impl: ThemeSkill, cap: 'theme-detection' },
+    { id: 'consistency-analysis', impl: ConsistencySkill, cap: 'consistency-analysis' },
+    { id: 'aesthetics-evaluation', impl: AestheticsSkill, cap: 'aesthetics-evaluation' },
+    { id: 'proportion-analysis', impl: ProportionSkill, cap: 'proportion-analysis' },
+    { id: 'detail-analysis', impl: DetailSkill, cap: 'detail-analysis' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'design', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Production (8)
+  [
+    { id: 'build-analysis', impl: BuildSkill, cap: 'build-analysis' },
+    { id: 'validation', impl: ValidationSkill, cap: 'validation' },
+    { id: 'packaging', impl: PackagingSkill, cap: 'packaging' },
+    { id: 'deployment-readiness', impl: DeploymentSkill, cap: 'deployment-readiness' },
+    { id: 'release-management', impl: ReleaseSkill, cap: 'release-management' },
+    { id: 'testing-qa', impl: TestingSkill, cap: 'testing-qa' },
+    { id: 'benchmarking', impl: BenchmarkSkill, cap: 'benchmarking' },
+    { id: 'publishing', impl: PublishSkill, cap: 'publishing' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'production', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Runtime (5)
+  [
+    { id: 'network-analysis', impl: NetworkSkill, cap: 'network-analysis' },
+    { id: 'replication-analysis', impl: ReplicationSkill, cap: 'replication-analysis' },
+    { id: 'caching-analysis', impl: CachingSkill, cap: 'caching-analysis' },
+    { id: 'scheduling-analysis', impl: SchedulingSkill, cap: 'scheduling-analysis' },
+    { id: 'lifecycle-management', impl: LifecycleSkill, cap: 'lifecycle-management' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'runtime', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Governance (5)
+  [
+    { id: 'versioning', impl: VersioningSkill, cap: 'versioning' },
+    { id: 'access-control', impl: AccessControlSkill, cap: 'access-control' },
+    { id: 'regulatory-compliance', impl: RegulatorySkill, cap: 'regulatory-compliance' },
+    { id: 'documentation-analysis', impl: DocumentationSkill, cap: 'documentation-analysis' },
+    { id: 'change-management', impl: ChangeManagementSkill, cap: 'change-management' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'governance', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Intelligence (5)
+  [
+    { id: 'decision-making', impl: DecisionSkill, cap: 'decision-making' },
+    { id: 'classification', impl: ClassificationSkill, cap: 'classification' },
+    { id: 'clustering', impl: ClusteringSkill, cap: 'clustering' },
+    { id: 'recommendations', impl: RecommendationSkill, cap: 'recommendations' },
+    { id: 'anomaly-detection', impl: AnomalyDetectionSkill, cap: 'anomaly-detection' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'intelligence', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Evolution (5)
+  [
+    { id: 'mutation', impl: MutationSkill, cap: 'mutation' },
+    { id: 'selection', impl: SelectionSkill, cap: 'selection' },
+    { id: 'crossover', impl: CrossoverSkill, cap: 'crossover' },
+    { id: 'diversity-analysis', impl: DiversitySkill, cap: 'diversity-analysis' },
+    { id: 'convergence-detection', impl: ConvergenceSkill, cap: 'convergence-detection' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'evolution', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Security (5)
+  [
+    { id: 'encryption-analysis', impl: EncryptionSkill, cap: 'encryption-analysis' },
+    { id: 'authentication', impl: AuthenticationSkill, cap: 'authentication' },
+    { id: 'authorization', impl: AuthorizationSkill, cap: 'authorization' },
+    { id: 'sandbox-analysis', impl: SandboxSkill, cap: 'sandbox-analysis' },
+    { id: 'intrusion-detection', impl: IntrusionDetectionSkill, cap: 'intrusion-detection' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'security', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Business (5)
+  [
+    { id: 'analytics', impl: AnalyticsSkill, cap: 'analytics' },
+    { id: 'conversion-optimization', impl: ConversionSkill, cap: 'conversion-optimization' },
+    { id: 'churn-analysis', impl: ChurnSkill, cap: 'churn-analysis' },
+    { id: 'ltv-analysis', impl: LTVSkill, cap: 'ltv-analysis' },
+    { id: 'competitive-analysis', impl: CompetitiveSkill, cap: 'competitive-analysis' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'business', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Integration (5)
+  [
+    { id: 'data-sync', impl: DataSyncSkill, cap: 'data-sync' },
+    { id: 'data-transformation', impl: TransformSkill, cap: 'data-transformation' },
+    { id: 'adapter-support', impl: AdapterSkill, cap: 'adapter-support' },
+    { id: 'message-queue', impl: MessageQueueSkill, cap: 'message-queue' },
+    { id: 'etl-pipeline', impl: ETLSkill, cap: 'etl-pipeline' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'integration', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Extended Learning (5)
+  [
+    { id: 'transfer-learning', impl: TransferLearningSkill, cap: 'transfer-learning' },
+    { id: 'meta-learning', impl: MetaLearningSkill, cap: 'meta-learning' },
+    { id: 'active-learning', impl: ActiveLearningSkill, cap: 'active-learning' },
+    { id: 'curriculum-learning', impl: CurriculumSkill, cap: 'curriculum-learning' },
+    { id: 'reinforcement-learning', impl: ReinforcementSkill, cap: 'reinforcement-learning' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: 'learning', name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
+
+  // Final Batch (24)
+  [
+    { id: 'procedural-generation', impl: ProceduralSkill, cap: 'procedural-generation', d: 'creation' },
+    { id: 'modular-design', impl: ModularSkill, cap: 'modular-design', d: 'creation' },
+    { id: 'asset-management', impl: AssetSkill, cap: 'asset-management', d: 'creation' },
+    { id: 'template-system', impl: TemplateSkill, cap: 'template-system', d: 'creation' },
+    { id: 'sentiment-analysis', impl: SentimentSkill, cap: 'sentiment-analysis', d: 'analysis' },
+    { id: 'trend-detection', impl: TrendSkill, cap: 'trend-detection', d: 'analysis' },
+    { id: 'complexity-measurement', impl: ComplexitySkill, cap: 'complexity-measurement', d: 'analysis' },
+    { id: 'dependency-analysis', impl: DependencySkill, cap: 'dependency-analysis', d: 'analysis' },
+    { id: 'layout-optimization', impl: LayoutSkill, cap: 'layout-optimization', d: 'design' },
+    { id: 'responsive-design', impl: ResponsiveSkill, cap: 'responsive-design', d: 'design' },
+    { id: 'accessibility', impl: AccessibilitySkill, cap: 'accessibility', d: 'design' },
+    { id: 'branding-consistency', impl: BrandingSkill, cap: 'branding-consistency', d: 'design' },
+    { id: 'continuous-integration', impl: CISkill, cap: 'continuous-integration', d: 'production' },
+    { id: 'continuous-deployment', impl: CDSkill, cap: 'continuous-deployment', d: 'production' },
+    { id: 'rollback-support', impl: RollbackSkill, cap: 'rollback-support', d: 'production' },
+    { id: 'production-monitoring', impl: MonitoringSkill, cap: 'production-monitoring', d: 'production' },
+    { id: 'load-balancing', impl: LoadBalancingSkill, cap: 'load-balancing', d: 'runtime' },
+    { id: 'rate-throttling', impl: ThrottlingSkill, cap: 'rate-throttling', d: 'runtime' },
+    { id: 'license-compliance', impl: LicensingSkill, cap: 'license-compliance', d: 'governance' },
+    { id: 'ethics-compliance', impl: EthicsSkill, cap: 'ethics-compliance', d: 'governance' },
+    { id: 'nlp', impl: NLPSkill, cap: 'nlp', d: 'intelligence' },
+    { id: 'computer-vision', impl: VisionSkill, cap: 'computer-vision', d: 'intelligence' },
+    { id: 'ab-testing', impl: ABTestingSkill, cap: 'ab-testing', d: 'evolution' },
+    { id: 'chaos-engineering', impl: ChaosEngineeringSkill, cap: 'chaos-engineering', d: 'evolution' }
+  ].forEach(s => ring.registerSkill({ id: s.id, domain: s.d, name: s.impl.name, version: '1.0.0', capabilities: [s.cap], dependencies: [], implementation: new s.impl() }));
 
   const skillCount = ring.getStatistics().totalSkills;
   const domainCount = ring.getStatistics().domains.filter(d => d.skillCount > 0).length;

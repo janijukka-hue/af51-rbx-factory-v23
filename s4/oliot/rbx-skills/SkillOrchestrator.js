@@ -18,18 +18,24 @@
 
 import { SemanticAnalysisSkill } from './SemanticAnalysisSkill.js';
 import { PreviewDirectorSkill } from './PreviewDirectorSkill.js';
+import { VehicleSkill } from './VehicleSkill.js';
+import { CompositionSkill } from './CompositionSkill.js';
+import { QualityGateSkill } from './QualityGateSkill.js';
 
 export class SkillOrchestrator {
   constructor() {
     this.skills = new Map();
     this.pipeline = [];
-    
+
     // Register core skills
     this.registerSkill('semantic', new SemanticAnalysisSkill());
+    this.registerSkill('vehicle', new VehicleSkill());
+    this.registerSkill('composition', new CompositionSkill());
     this.registerSkill('preview-director', new PreviewDirectorSkill());
-    
-    // Default pipeline
-    this.setPipeline(['semantic', 'preview-director']);
+    this.registerSkill('quality-gate', new QualityGateSkill());
+
+    // Default full pipeline
+    this.setPipeline(['semantic', 'vehicle', 'composition', 'preview-director', 'quality-gate']);
   }
 
   /**
@@ -81,13 +87,25 @@ export class SkillOrchestrator {
         results[skillName] = skillOutput;
         
         // Enrich context for next skill
-        // SemanticAnalysis output becomes available to PreviewDirector
+        // Each skill's output becomes available to downstream skills
         if (skillName === 'semantic') {
           context.semanticAnalysis = skillOutput;
         }
-        
+
+        if (skillName === 'vehicle') {
+          context.vehicleAnalysis = skillOutput;
+        }
+
+        if (skillName === 'composition') {
+          context.compositionAnalysis = skillOutput;
+        }
+
         if (skillName === 'preview-director') {
           context.cameraSetup = skillOutput;
+        }
+
+        if (skillName === 'quality-gate') {
+          context.qualityGate = skillOutput;
         }
         
       } catch (error) {
@@ -105,11 +123,17 @@ export class SkillOrchestrator {
       skills: results,
       context: {
         semantic: results.semantic || null,
+        vehicle: results.vehicle || null,
+        composition: results.composition || null,
         cameraSetup: results['preview-director'] || null,
+        qualityGate: results['quality-gate'] || null,
       },
       // Backward compatibility with existing Director API
       semantic: results.semantic,
+      vehicleAnalysis: results.vehicle,
+      compositionAnalysis: results.composition,
       previewDirector: results['preview-director'],
+      qualityGate: results['quality-gate'],
     };
   }
 

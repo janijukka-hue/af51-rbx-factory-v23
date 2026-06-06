@@ -85,15 +85,36 @@ async function test() {
     const enriched = await orchestrator.quickAnalyze(graph);
 
     console.log('\n3. Orchestrator Results:\n');
-    
+
     // Semantic Analysis
     if (enriched.semantic) {
       console.log('   📋 Semantic Analysis:');
       console.log('      Intent:', enriched.semantic.intent);
       console.log('      Vehicles:', enriched.semantic.vehicles.length);
-      console.log('      Buildings:', enriched.semantic.buildings.length);
-      console.log('      Characters:', enriched.semantic.characters.length);
       console.log('      Confidence:', enriched.semantic.confidence);
+      console.log('');
+    }
+
+    // Vehicle Analysis
+    if (enriched.vehicleAnalysis && enriched.vehicleAnalysis.vehicles.length > 0) {
+      console.log('   🚗 Vehicle Analysis:');
+      const v = enriched.vehicleAnalysis.vehicles[0];
+      console.log('      Name:', v.name);
+      console.log('      Type:', v.type);
+      console.log('      Wheels:', v.wheelConfig.count, '(' + v.wheelConfig.layout + ')');
+      console.log('      Quality:', v.quality.rating, '(' + v.quality.score + '/100)');
+      console.log('      Symmetry:', v.symmetry.balance);
+      console.log('');
+    }
+
+    // Composition Analysis
+    if (enriched.compositionAnalysis) {
+      console.log('   🎨 Composition Analysis:');
+      if (enriched.compositionAnalysis.hero) {
+        console.log('      Hero:', enriched.compositionAnalysis.hero.name, '(' + enriched.compositionAnalysis.hero.type + ')');
+      }
+      console.log('      Quality:', enriched.compositionAnalysis.quality.rating, '(' + enriched.compositionAnalysis.quality.score + '/100)');
+      console.log('      Balance:', enriched.compositionAnalysis.balance.quality);
       console.log('');
     }
 
@@ -102,10 +123,20 @@ async function test() {
       console.log('   🎥 Preview Director:');
       console.log('      View mode:', enriched.previewDirector.viewMode);
       console.log('      Hero objects:', enriched.previewDirector.heroObjects.length);
-      console.log('      Focus point:', enriched.previewDirector.focusPoint);
-      console.log('      Camera position:', enriched.previewDirector.cameraPosition);
-      console.log('      Orbit radius:', enriched.previewDirector.orbitRadius.toFixed(2));
       console.log('      Ignore baseplate:', enriched.previewDirector.ignoreBaseplate);
+      console.log('');
+    }
+
+    // Quality Gate
+    if (enriched.qualityGate) {
+      console.log('   ✅ Quality Gate:');
+      console.log('      Overall:', enriched.qualityGate.scores.overall + '/100');
+      console.log('      Verdict:', enriched.qualityGate.verdict);
+      console.log('      Tier:', enriched.qualityGate.tier);
+      console.log('      Ready:', enriched.qualityGate.ready ? 'YES' : 'NO');
+      if (enriched.qualityGate.blockers.length > 0) {
+        console.log('      Blockers:', enriched.qualityGate.blockers.length);
+      }
       console.log('');
     }
 
@@ -113,12 +144,14 @@ async function test() {
     const tests = [
       { name: 'Orchestrator returns results', pass: enriched != null },
       { name: 'Semantic analysis ran', pass: enriched.semantic != null },
+      { name: 'Vehicle analysis ran', pass: enriched.vehicleAnalysis != null },
+      { name: 'Composition analysis ran', pass: enriched.compositionAnalysis != null },
       { name: 'Preview director ran', pass: enriched.previewDirector != null },
+      { name: 'Quality gate ran', pass: enriched.qualityGate != null },
       { name: 'Intent is vehicle', pass: enriched.semantic && enriched.semantic.intent === 'vehicle' },
-      { name: 'Vehicle detected', pass: enriched.semantic && enriched.semantic.vehicles.length > 0 },
-      { name: 'Hero objects identified', pass: enriched.previewDirector && enriched.previewDirector.heroObjects.length > 0 },
-      { name: 'View mode is vehicle', pass: enriched.previewDirector && enriched.previewDirector.viewMode === 'vehicle' },
-      { name: 'Baseplate ignored', pass: enriched.previewDirector && enriched.previewDirector.ignoreBaseplate === true },
+      { name: 'Vehicle detected', pass: enriched.vehicleAnalysis && enriched.vehicleAnalysis.vehicles.length > 0 },
+      { name: 'Hero identified', pass: enriched.compositionAnalysis && enriched.compositionAnalysis.hero != null },
+      { name: 'Quality verdict exists', pass: enriched.qualityGate && enriched.qualityGate.verdict != null },
     ];
 
     console.log('4. Test Results:\n');

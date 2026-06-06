@@ -12,6 +12,7 @@
 import React, { useMemo, useEffect } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { normalizeStructures, structuresFromPreviewData, terrainFromPreviewData } from "./rbxPreviewUtils.js";
+import { RbxPreviewDirector } from "../../s4/oliot/rbx-directors/RbxPreviewDirector.js";
 
 var UI_CLASSES = ["ScreenGui","Frame","TextLabel","TextButton","TextBox","ImageLabel","ImageButton","ScrollingFrame","SurfaceGui","BillboardGui","UIListLayout","UIGridLayout","UICorner"];
 function isUiStructure(s) { return s.type === "ui" || UI_CLASSES.indexOf(s.luaClass) !== -1; }
@@ -35,11 +36,54 @@ function getUIRenderingNote(uiItems) {
   return "UI elements (see hierarchy for details)";
 }
 
-function getBounds(structures) {
+// v66: Hero-aware bounds calculation
+// Director identifies hero objects (vehicles, characters, buildings)
+// Camera should focus on those, not on giant baseplates/terrain
+function getBounds(structures, enriched) {
   var v = structures.filter(function(s){ return !isUiStructure(s); });
   if (v.length === 0) return { minX:-10,maxX:10,minY:0,maxY:20,minZ:-10,maxZ:10 };
+
+  // If Director found hero objects, focus camera on those
+  var heroStructures = v;
+  if (enriched && enriched.semantic) {
+    var heroIds = [];
+
+    // Collect hero object IDs from Director's analysis
+    if (enriched.semantic.vehicles && enriched.semantic.vehicles.length > 0) {
+      enriched.semantic.vehicles.forEach(function(vh) {
+        if (vh.id) heroIds.push(vh.id);
+      });
+    }
+    if (enriched.semantic.buildings && enriched.semantic.buildings.length > 0) {
+      enriched.semantic.buildings.forEach(function(b) {
+        if (b.id) heroIds.push(b.id);
+      });
+    }
+    if (enriched.characters && enriched.characters.rigs && enriched.characters.rigs.length > 0) {
+      enriched.characters.rigs.forEach(function(rig) {
+        if (rig.name) {
+          // Find structures matching character name
+          v.forEach(function(s) {
+            if (s.label && s.label.toLowerCase().indexOf(rig.name.toLowerCase()) >= 0) {
+              heroIds.push(s.id);
+            }
+          });
+        }
+      });
+    }
+
+    // If we found hero objects, use only those for bounds
+    if (heroIds.length > 0) {
+      heroStructures = v.filter(function(s) {
+        return heroIds.indexOf(s.id) >= 0;
+      });
+      console.log('[Camera] Focusing on', heroStructures.length, 'hero objects (ignoring baseplate/terrain)');
+    }
+  }
+
+  // Calculate bounds from hero structures (or all if no heroes)
   var b = { minX:Infinity,maxX:-Infinity,minY:Infinity,maxY:-Infinity,minZ:Infinity,maxZ:-Infinity };
-  v.forEach(function(s){
+  heroStructures.forEach(function(s){
     var x=+s.x||0,y=+s.y||0,z=+s.z||0,sx=+s.w||4,sy=+s.h||1,sz=+s.d||4;
     b.minX=Math.min(b.minX,x-sx/2); b.maxX=Math.max(b.maxX,x+sx/2);
     b.minY=Math.min(b.minY,y-sy/2); b.maxY=Math.max(b.maxY,y+sy/2);
@@ -48,10 +92,10 @@ function getBounds(structures) {
   return b;
 }
 
-function buildSrcDoc(structures, meta, selectedId) {
+function buildSrcDoc(structures, meta, selectedId, enriched) {
   var threeD = structures.filter(function(s){ return !isUiStructure(s); });
   var blocks = JSON.stringify(threeD);
-  var bounds = JSON.stringify(getBounds(structures));
+  var bounds = JSON.stringify(getBounds(structures, enriched));
   var accent = (meta && meta.accent) || "#25D0FF";
   var label  = (meta && meta.label) || "RBX WORLD";
   var qScore = (meta && typeof meta.qualityScore === "number") ? meta.qualityScore : null;
@@ -292,12 +336,75 @@ export function RbxPreviewCanvas(props) {
   }, [onSelect]);
   var previewData    = props.previewData || null;
   var qualityReport  = props.qualityReport || (previewData && previewData.report) || null;
+
+  // v66: RbxPreviewDirector enriches the scene BEFORE rendering
+  // ─────────────────────────────────────────────────────────────
+  // Director analyzes:
+  // - Semantic grouping (vehicles, characters, environment)
+  // - Hero selection (main focus object)
+  // - Character rigs (humanoid detection)
+  // - Performance analysis (draw calls, mobile readiness)
+  //
+  // This intelligence DRIVES the preview, not just observes it.
+  var enriched = useMemo(function() {
+    if (!previewData) return null;
+
+    // Convert preview data to graph format for Director
+    var graph = null;
+    if (previewData.graph && previewData.graph.nodes) {
+      graph = previewData.graph; // Already has graph
+    } else if (Array.isArray(previewData.nodes)) {
+      // production-scenegraph format
+      graph = { nodes: previewData.nodes };
+    } else if (Array.isArray(previewData.structures)) {
+      // generatedPreview format - convert structures back to nodes
+      graph = {
+        nodes: previewData.structures.map(function(s) {
+          return {
+            id: s.id,
+            className: s.luaClass || s.type,
+            properties: {
+              Name: s.label,
+              Position: [s.x, s.y, s.z],
+              Size: [s.w, s.h, s.d],
+              Color: s.color,
+              Material: s.material,
+              Anchored: s.anchored
+            },
+            parent: s.parent
+          };
+        })
+      };
+    }
+
+    if (!graph) return null;
+
+    // Let Director analyze the scene
+    var director = new RbxPreviewDirector();
+    return director.enrich(graph, {});
+  }, [previewData]);
+
   // v63: accept BOTH generatedPreview.json (.structures) and
   // production-scenegraph.json (.nodes). The conversion lives in
   // rbxPreviewUtils so it stays a pure function.
   var rawStructures  = structuresFromPreviewData(previewData);
   var structures     = normalizeStructures(rawStructures);
   var uiItems        = structures.filter(isUiStructure);
+
+  // v66: Apply Director's intelligence to enhance structures
+  // ─────────────────────────────────────────────────────────
+  // Director provides: semantic groups, hero objects, character rigs
+  // Use this to improve camera framing, grouping, and visual quality
+  if (enriched && enriched.semantic) {
+    // Log semantic understanding (for debugging)
+    console.log('[RbxPreviewDirector] Scene analysis:', {
+      vehicles: enriched.semantic.vehicles || [],
+      buildings: enriched.semantic.buildings || [],
+      characters: enriched.characters && enriched.characters.rigs ? enriched.characters.rigs.length : 0,
+      ui: enriched.ui ? Object.keys(enriched.ui).filter(function(k) { return enriched.ui[k].length > 0; }) : [],
+      performance: enriched.performance
+    });
+  }
 
   var meta = useMemo(function() {
     var targetId = (previewData && (previewData.target || previewData.targetId)) || props.targetId;
@@ -315,7 +422,7 @@ export function RbxPreviewCanvas(props) {
     };
   }, [previewData, props.targetId, qualityReport]);
 
-  var srcDoc = useMemo(function() { return buildSrcDoc(structures, meta, props.selectedId); }, [structures, meta, props.selectedId]);
+  var srcDoc = useMemo(function() { return buildSrcDoc(structures, meta, props.selectedId, enriched); }, [structures, meta, props.selectedId, enriched]);
 
   if (Platform.OS !== "web") {
     return (

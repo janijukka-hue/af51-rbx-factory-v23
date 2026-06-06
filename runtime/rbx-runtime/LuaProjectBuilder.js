@@ -107,6 +107,25 @@ export class LuaProjectBuilder {
     const preview = new PreviewRenderer().render(graph);
     const passCtx = runLuaPasses(graph);  // read-only analysis: quality + groups + features
 
+    // v67 SKILLS RING: Enterprise capability analysis (14 skills across 4 domains)
+    let skillsRingResult = null;
+    try {
+      const { quickAnalyze } = await import('../../k1/SkillsRingBootstrap.mjs');
+      const skillsGraph = {
+        nodes: graph.nodes.map(n => ({
+          id: n.id,
+          className: n.className,
+          properties: n.properties || {},
+          parent: n.parent
+        }))
+      };
+      skillsRingResult = await quickAnalyze(skillsGraph, 'analyze-scene');
+      console.log('[LuaProjectBuilder] Skills Ring analysis complete:', skillsRingResult.pipeline.length, 'skills');
+    } catch (error) {
+      console.warn('[LuaProjectBuilder] Skills Ring analysis failed:', error.message);
+      // Non-fatal: continue without Skills Ring data
+    }
+
     // KORJAUS 6: Parser diagnostics (count from AST nodes, not graph nodes)
     const allInstanceCreations = expandedAst.nodes.filter(n => n.type === 'InstanceCreation');
     const directInstances = allInstanceCreations.filter(n => !n.source || n.source === 'direct').length;
@@ -277,6 +296,7 @@ export class LuaProjectBuilder {
       design:   intelligence ? intelligence.report : null,    // Creative Director (creative)
       studio:   intelligence ? intelligence.studio : null,    // Studio Director (readiness)
       shots:    intelligence ? intelligence.shots : null,     // Cinematic Director (camera shots)
+      skillsRing: skillsRingResult,  // v67: Skills Ring (14 skills, 4 domains)
     };
   }
 }

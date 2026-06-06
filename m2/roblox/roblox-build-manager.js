@@ -150,6 +150,34 @@ export class RobloxBuildManager {
 
     _a('info', `Build start: ${target.id} v${v} (${phases.length === 0 ? '11' : '?'} phases)`);
 
+    // ── Phase 0: INPUT_VALIDATION ─────────────────────────────────────────
+    // v64 CODE-AWARE: Reject meaningless/garbage input before build starts.
+    // INVARIANT: INVALID SOURCE MUST NEVER PRODUCE A ZIP.
+    //
+    // Rules:
+    // 1. Empty/nonsense input → BUILD_REJECTED_INVALID_SOURCE
+    // 2. No Roblox build intent → BUILD_REJECTED_INVALID_SOURCE
+    // 3. Valid Lua code → ALLOW (code is intent)
+    // 4. Valid prompt → ALLOW (analyze intent)
+    if (userSource !== null && userSource !== undefined) {
+      const { detectLuaInput } = await import('./lua-input-detector.js');
+      const { validateBuildInput, createRejectionResponse } = await import('./rbx-input-validator.js');
+
+      const detection = detectLuaInput(userSource);
+      const validation = validateBuildInput(userSource, detection);
+
+      _a('info', `INPUT_VALIDATION: ${validation.intent} (confidence: ${validation.confidence})`, { validation });
+
+      if (!validation.valid) {
+        _cleanup();
+        _a('error', `Build REJECTED: ${validation.reason}`);
+        const rejection = createRejectionResponse(validation);
+        return { ...rejection, buildId: null, outputZip: null, zipPath: null, phases: [], summary: { durationMs: Date.now() - startTs } };
+      }
+
+      _rec('INPUT_VALIDATION', { ok: true, intent: validation.intent, confidence: validation.confidence });
+    }
+
     // ── Phase 1: STERILITY ────────────────────────────────────────────────
     // Check buildRoot is clean before writing anything into it
     // (on empty tmpDir this always passes — validates if custom buildRoot given)
@@ -205,7 +233,11 @@ export class RobloxBuildManager {
     // Production renderer chain (t3/Factory/rbx-production).
     // Materializes target-typed geometry, materials, lighting, gameplay
     // hooks and writes deterministic Luau builders + scene-graph.json artifact.
-    try { r = await VisualDirector.direct({ buildRoot: br, target, auditLedger, buildId, deterministic: _deterministic }); }
+    //
+    // v64 CODE-AWARE FACTORY: if userSource is provided, analyze it and pass
+    // the code features to VisualDirector so it can generate ONLY what the
+    // user's code needs (no template overlay).
+    try { r = await VisualDirector.direct({ buildRoot: br, target, auditLedger, buildId, deterministic: _deterministic, userSource }); }
     catch (e) { return _fail(BUILD_PHASE.VISUAL_PRODUCTION, e.message); }
     _rec(BUILD_PHASE.VISUAL_PRODUCTION, { ok: r.ok, error: r.error || null, files: r.files || null });
     if (!r.ok) return _fail(BUILD_PHASE.VISUAL_PRODUCTION, r.error || 'visual production failed');

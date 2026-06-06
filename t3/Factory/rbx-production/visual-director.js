@@ -26,7 +26,7 @@ import { QualityGate }         from "./quality-gate.js";
 import { RobloxEmitter }       from "./roblox-emitter.js";
 
 export const VisualDirector = {
-  async direct({ buildRoot, target, auditLedger, buildId, deterministic }) {
+  async direct({ buildRoot, target, auditLedger, buildId, deterministic, userSource = null }) {
     if (!buildRoot) throw new Error("[VisualDirector] buildRoot required");
     if (!target?.id) throw new Error("[VisualDirector] target.id required");
 
@@ -46,8 +46,53 @@ export const VisualDirector = {
       }
       _a("info", "FRESH BUILD STATE — empty graph", { target: target.id });
 
-      const comp = CompositionEngine.compose({ graph, target });
-      _rec("composition", comp.ok, { partsAdded: comp.partsAdded });
+      // v64 CODE-AWARE FACTORY: if user provided Lua CODE (not prompt),
+      // analyze it to determine what supporting infrastructure to build.
+      // Prompts go through standard template-driven pipeline.
+      let codeFeatures = null;
+      let isLuaCode = false;
+      if (userSource && typeof userSource === "string" && userSource.length > 0) {
+        const { detectLuaInput } = await import("../../../m2/roblox/lua-input-detector.js");
+        const detection = detectLuaInput(userSource);
+
+        // Only analyze if it's actual Lua code, not a natural language prompt
+        if (detection.isLua) {
+          isLuaCode = true;
+          const { analyzeCodeFeatures } = await import("../../../m2/roblox/lua-code-analyzer.js");
+          codeFeatures = analyzeCodeFeatures(userSource);
+          _a("info", `CODE-AWARE: ${codeFeatures.analysis.summary}`, {
+            targetHint: codeFeatures.targetHint,
+            signals: codeFeatures.analysis.signals,
+            confidence: codeFeatures.analysis.confidence,
+          });
+        } else {
+          // It's a prompt — log and continue to template-driven build
+          _a("info", `PROMPT detected: "${userSource.slice(0, 50)}..." → template-driven build`);
+        }
+      }
+
+      // Composition: if code-aware mode is active AND user code exists,
+      // SKIP the full target composition (no RPG village, no OBBY course).
+      // Instead, generate ONLY minimal support structures the code needs.
+      let comp;
+      let isCodeDriven = false;
+      if (codeFeatures && codeFeatures.targetHint === "code-driven") {
+        // User code is complete — no template needed
+        _a("info", "CODE-DRIVEN mode: skipping template composition");
+        comp = { ok: true, type: "code-driven", partsAdded: 0 };
+        isCodeDriven = true;
+      } else if (codeFeatures) {
+        // User code needs some support — minimal composition
+        _a("info", `CODE-AWARE mode: minimal ${codeFeatures.targetHint} support`);
+        // TODO: implement minimal support builder here
+        // For now, fall back to standard composition but log the intent
+        comp = CompositionEngine.compose({ graph, target });
+        isCodeDriven = true;  // Still code-driven, just with support
+      } else {
+        // No user code — standard target-based composition
+        comp = CompositionEngine.compose({ graph, target });
+      }
+      _rec("composition", comp.ok, { partsAdded: comp.partsAdded, mode: codeFeatures ? "code-aware" : "template" });
 
       // World-believability passes (v61). Each runs on the SceneGraph in
       // place and is idempotent: a second run produces the same node count.
@@ -111,11 +156,14 @@ export const VisualDirector = {
       const tt = TierTagger.apply({ graph });
       _rec("tier", tt.ok, { stamped: tt.stamped, perTier: tt.perTier });
 
-      const qa = QualityGate.evaluate({ graph, target });
+      // v64 CODE-AWARE: if user provided code, relax QualityGate to allow
+      // minimal/empty composition (user code drives the world, not templates).
+      const qa = QualityGate.evaluate({ graph, target, isCodeDriven });
       _rec("qualityGate", qa.ok, {
         parts:     qa.parts,
         criticals: qa.criticals?.length || 0,
         warnings:  qa.warnings?.length  || 0,
+        mode:      isCodeDriven ? "code-driven" : "template",
       });
       if (qa.warnings?.length) {
         _a("warn", "QualityGate warnings: " + qa.warnings.length, { warnings: qa.warnings });

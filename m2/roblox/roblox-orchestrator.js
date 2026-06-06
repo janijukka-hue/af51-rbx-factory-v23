@@ -40,10 +40,10 @@ export class RobloxOrchestrator {
         gameName:intent.gameName, version:intent.version,
         placeId:intent.placeId, universeId:intent.universeId,
         keepBuildDir:intent.keepBuildDir||false, auditLedger,
-        // v63 — user-supplied Lua seed travels with the intent and is
-        // preserved as an extra ServerScriptService script in the final
-        // zip. Pure passthrough: orchestrator does not interpret it.
-        userSource: intent.userSource || null,
+        // v64 — user-supplied Lua seed travels with the intent. Empty string
+        // is VALID (needs validation gate) — only null/undefined means "no source".
+        // Do NOT convert empty string to null here (|| operator would do that).
+        userSource: intent.userSource !== undefined ? intent.userSource : null,
       });
       if (!build.ok) return { ok:false, error:build.error, errors:build.errors||[build.error], result:build };
 

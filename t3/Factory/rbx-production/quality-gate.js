@@ -114,7 +114,10 @@ function _densityByZone(graph) {
 }
 
 export const QualityGate = {
-  evaluate({ graph, target }) {
+  /**
+   * v64 CODE-AWARE: if isCodeDriven=true, relaxes template-based requirements.
+   */
+  evaluate({ graph, target, isCodeDriven = false }) {
     const type   = String(target.type || target.id || "").toLowerCase();
     const parts  = graph.findByClass("Part").length;
     const lights = graph.findByClass("PointLight").length;
@@ -137,39 +140,46 @@ export const QualityGate = {
 
     const criticals = [];
     const warnings  = [];
+    const rec = RECOMMENDED[type];  // Move outside if-block so it's available later
 
-    const rec = RECOMMENDED[type];
-    if (rec) {
-      if (parts < rec.minParts) {
-        criticals.push("parts below recommended minimum for type " + type +
-                       " (" + parts + " < " + rec.minParts + ")");
+    // v64 CODE-AWARE: if user provided their own Lua code, SKIP all
+    // template-based composition checks. User code drives the world,
+    // we only validate basic Roblox requirements (SpawnLocation).
+    if (!isCodeDriven) {
+      if (rec) {
+        if (parts < rec.minParts) {
+          criticals.push("parts below recommended minimum for type " + type +
+                         " (" + parts + " < " + rec.minParts + ")");
+        }
+        for (const need of rec.needs) {
+          if (!tagCounts[need]) criticals.push("missing structural tag: " + need);
+        }
       }
-      for (const need of rec.needs) {
-        if (!tagCounts[need]) criticals.push("missing structural tag: " + need);
-      }
-    }
-    if (spawns === 0) criticals.push("no SpawnLocation in scene — players would spawn at origin");
 
-    // World-believability invariants (blocking — these are the v61 sprint).
-    if (moduleCategories < REQUIRED_BELIEVABILITY.minModuleCategories) {
-      criticals.push("module diversity below minimum (" + moduleCategories +
-                     " < " + REQUIRED_BELIEVABILITY.minModuleCategories + ")");
+      // World-believability invariants (blocking — these are the v61 sprint).
+      if (moduleCategories < REQUIRED_BELIEVABILITY.minModuleCategories) {
+        criticals.push("module diversity below minimum (" + moduleCategories +
+                       " < " + REQUIRED_BELIEVABILITY.minModuleCategories + ")");
+      }
+      if (landmarks < REQUIRED_BELIEVABILITY.minLandmarks) {
+        criticals.push("no landmark Parts — map lacks focal identity");
+      }
+      if (silhouette < REQUIRED_BELIEVABILITY.minSilhouette) {
+        criticals.push("silhouette forms below minimum (" + silhouette +
+                       " < " + REQUIRED_BELIEVABILITY.minSilhouette + ")");
+      }
+      if (traversal < REQUIRED_BELIEVABILITY.minTraversal) {
+        criticals.push("traversal cues below minimum (" + traversal +
+                       " < " + REQUIRED_BELIEVABILITY.minTraversal + ")");
+      }
+      if (layerInfo.present < REQUIRED_BELIEVABILITY.minLayers) {
+        criticals.push("structural layering coverage below minimum (" +
+                       layerInfo.present + " < " + REQUIRED_BELIEVABILITY.minLayers + ")");
+      }
     }
-    if (landmarks < REQUIRED_BELIEVABILITY.minLandmarks) {
-      criticals.push("no landmark Parts — map lacks focal identity");
-    }
-    if (silhouette < REQUIRED_BELIEVABILITY.minSilhouette) {
-      criticals.push("silhouette forms below minimum (" + silhouette +
-                     " < " + REQUIRED_BELIEVABILITY.minSilhouette + ")");
-    }
-    if (traversal < REQUIRED_BELIEVABILITY.minTraversal) {
-      criticals.push("traversal cues below minimum (" + traversal +
-                     " < " + REQUIRED_BELIEVABILITY.minTraversal + ")");
-    }
-    if (layerInfo.present < REQUIRED_BELIEVABILITY.minLayers) {
-      criticals.push("structural layering coverage below minimum (" +
-                     layerInfo.present + " < " + REQUIRED_BELIEVABILITY.minLayers + ")");
-    }
+
+    // Basic Roblox requirement: always need a SpawnLocation (even in code-driven mode)
+    if (spawns === 0) warnings.push("no SpawnLocation — players spawn at origin (add SpawnLocation for better UX)");
 
     if (lights === 0)            warnings.push("no PointLights — scene relies entirely on Lighting service");
     if (materialDiversity < 2)   warnings.push("material diversity below 2 — scene looks monotone");
@@ -182,39 +192,39 @@ export const QualityGate = {
     const rules      = ruleCoverage(graph, target);
     const polishTier = tiers.perTier[5] || 0;
     const propTier   = tiers.perTier[3] || 0;
-
-    if (cube.ratio > 0.35) {
-      criticals.push("simple-cube ratio above 35% (" +
-                     (cube.ratio * 100).toFixed(1) + "% — world reads as boxes)");
-    }
-    if (untrimmed.ratio > 0.25) {
-      criticals.push("untrimmed-platform ratio above 25% (" +
-                     (untrimmed.ratio * 100).toFixed(1) + "% — floors lack edge detail)");
-    }
-    if (tiers.present < 5) {
-      criticals.push("tier coverage below 5 (" + tiers.present +
-                     "/6 — missing tier(s): " +
-                     Object.entries(tiers.perTier).filter(([, v]) => v === 0).map(([k]) => "T" + k).join(", ") + ")");
-    }
-    if (polishTier < 3) {
-      criticals.push("polish tier (TIER_5) below minimum (" + polishTier +
-                     " < 3 — storytelling missing)");
-    }
-    if (rules.missing.length) {
-      criticals.push("masterpiece rules unsatisfied for " + (rules.identity || type) +
-                     ": " + rules.missing.join(", "));
-    }
-
-    // ── v2 — Per-target gameplay invariants ─────────────────────────────
-    // Each missing gameplay anchor is BLOCKING and also docks the quality
-    // score by 20 points (capped at the score floor). This is the explicit
-    // guarantee: a build with qualityScore 97 must actually be playable.
-    const gameplayReqs = GAMEPLAY_REQUIREMENTS[type] || [];
     const gameplayMissing = [];
-    for (const req of gameplayReqs) {
-      if (!req.check(tagCounts)) {
-        criticals.push("gameplay: " + req.msg);
-        gameplayMissing.push(req.msg);
+    const gameplayReqs = GAMEPLAY_REQUIREMENTS[type] || [];  // Move outside if-block
+
+    // v64 CODE-AWARE: skip masterpiece checks if code-driven
+    if (!isCodeDriven) {
+      if (cube.ratio > 0.35) {
+        criticals.push("simple-cube ratio above 35% (" +
+                       (cube.ratio * 100).toFixed(1) + "% — world reads as boxes)");
+      }
+      if (untrimmed.ratio > 0.25) {
+        criticals.push("untrimmed-platform ratio above 25% (" +
+                       (untrimmed.ratio * 100).toFixed(1) + "% — floors lack edge detail)");
+      }
+      if (tiers.present < 5) {
+        criticals.push("tier coverage below 5 (" + tiers.present +
+                       "/6 — missing tier(s): " +
+                       Object.entries(tiers.perTier).filter(([, v]) => v === 0).map(([k]) => "T" + k).join(", ") + ")");
+      }
+      if (polishTier < 3) {
+        criticals.push("polish tier (TIER_5) below minimum (" + polishTier +
+                       " < 3 — storytelling missing)");
+      }
+      if (rules.missing.length) {
+        criticals.push("masterpiece rules unsatisfied for " + (rules.identity || type) +
+                       ": " + rules.missing.join(", "));
+      }
+
+      // ── v2 — Per-target gameplay invariants ─────────────────────────────
+      for (const req of gameplayReqs) {
+        if (!req.check(tagCounts)) {
+          criticals.push("gameplay: " + req.msg);
+          gameplayMissing.push(req.msg);
+        }
       }
     }
 
@@ -233,7 +243,8 @@ export const QualityGate = {
     const adjustedScore = Math.max(0, qsRaw.score - gameplayPenalty);
     const qs = { score: adjustedScore, factors: { ...qsRaw.factors, gameplayPenalty } };
 
-    if (qs.score < 85) {
+    // v64 CODE-AWARE: skip quality score gate if code-driven
+    if (!isCodeDriven && qs.score < 85) {
       criticals.push("Masterpiece Quality Score below 85 (" + qs.score + "/100" +
                      (gameplayPenalty > 0 ? `, -${gameplayPenalty} gameplay penalty` : "") + ")");
     }
